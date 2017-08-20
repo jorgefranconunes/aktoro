@@ -1,0 +1,293 @@
+#!/bin/bash
+###########################################################################
+#
+# Copyright (c) 2017 Aktoro project contributors.
+#
+#
+# Updates the project version in all pom.xml files to match the
+# version defined in "conf/aktoro-defaults.conf".
+#
+###########################################################################
+
+_scriptName=$0
+_scriptDir=$(dirname $0)
+_aktHome=$(cd $_scriptDir/../..; pwd)
+
+source ${_aktHome}/lib/bash/aktoro-utils.sh
+source ${_aktHome}/conf/aktoro-defaults.conf
+
+
+
+
+
+TOOL_NAME="Version updater"
+PRODUCT_HEADER="${AKT_PRODUCT_NAME} ${AKT_VERSION} - ${TOOL_NAME}"
+
+DEFAULT_NEW_BUILD_NUMBER=SNAPSHOT
+
+_newBuildNumber=${DEFAULT_NEW_BUILD_NUMBER}
+_newVersion=
+_isQuiet=false
+_masterConfFile=${_aktHome}/conf/aktoro-defaults.conf
+_xsltprocTool=xsltproc
+
+
+
+
+
+#######################################################################
+#
+# The main script.
+#
+#######################################################################
+
+function main () {
+
+    processCliArgs "$@"
+
+    aktCheckForTools \
+        "${_xsltprocTool}"
+
+    updateVersion
+}
+
+
+
+
+
+###########################################################################
+#
+# Processes the command line options.
+#
+###########################################################################
+
+function processCliArgs () {
+
+    for option in "$@" ; do
+        case $option in
+            --quiet )
+                _isQuiet=true
+                ;;
+            --build-number=* )
+                _newBuildNumber=$(expr "$option" : '--build-number=\(.*\)')
+                ;;
+            --help )
+                displayHelp
+                exit 0
+                ;;
+            --*=* )
+                option=$(expr $option : '\(--.*\)=.*')
+                aktError "$option : unknown option. Use --help for details."
+                ;;
+            * )
+                aktError "$option : unknown option. Use --help for details."
+                ;;
+        esac
+    done
+
+    if [ -z "$_newBuildNumber" ] ; then
+        aktError "Missing mandatory --build-number option. Use --help for details."
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# Displays an help messages describing the configuration options.
+#
+###########################################################################
+
+function displayHelp () {
+
+    cat <<EOF
+
+${PRODUCT_HEADER}
+${AKT_COPYRIGHT_HEADER}
+
+Updates the version number in source files.
+
+Available options:
+
+--build-number=BUILD_NUMBER
+    Version number sufix. The product version is obtained by
+    concatenating the main version with the provided build number. If
+    not specified it will default to
+    ${DEFAULT_NEW_BUILD_NUMBER}. Special value NONE means no build
+    number is to be appended to the version number.
+
+--quiet
+    Do not show any logging messages.
+
+--help
+    Prints this help text.
+
+EOF
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function updateVersion () {
+
+    myLog "${PRODUCT_HEADER}"
+    myLog "    Build number : ${_newBuildNumber}"
+
+    updateBuildNumberInConfigFile
+
+    local newVersion=$(source ${_masterConfFile} ; echo ${AKT_VERSION})
+    myLog "Syncing version to ${newVersion}"
+
+    updateVersionInPomFiles
+
+    myLog "Done updating build number to ${_newBuildNumber}"
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function updateBuildNumberInConfigFile () {
+
+    local confFile=${_masterConfFile}
+    local tmpConfFile=${confFile}.new
+    local newBuildNumber=${_newBuildNumber}
+
+    if [ "${newBuildNumber}" == NONE ] ; then
+        newBuildNumber=""
+    fi
+
+    sed "s/^AKT_BUILD_NUMBER=.*/AKT_BUILD_NUMBER=${newBuildNumber}/" \
+        < ${confFile} \
+        > ${tmpConfFile}
+
+    mv ${tmpConfFile} ${confFile}
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function updateVersionInPomFiles () {
+
+    local newVersion=$(source ${_masterConfFile} ; echo ${AKT_VERSION})
+
+    myLog "Updating POM files..."
+
+    local pomBase=${_aktHome}/modules
+    local pomFileList="
+        ${pomBase}/pom.xml
+        ${pomBase}/*/pom.xml
+"
+
+    for pomFile in ${pomFileList} ; do
+        myLog "    $(getRelativePath ${pomFile} ${pomBase})"
+        updateVersionInOnePomFile ${newVersion} ${pomFile}
+    done
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+function updateVersionInOnePomFile () {
+
+    local newVersion=$1
+    local pomFile=$2
+
+    local newPomVersion=${newVersion}
+    local newParentVersion=${newVersion}
+    local newPomFile=${pomFile}.new
+    local xsltFile=${_scriptDir}/../lib/xslt/update-pom-version.xsl
+
+    ${_xsltprocTool} \
+        --stringparam NEW_POM_VERSION "${newPomVersion}" \
+        --stringparam NEW_PARENT_VERSION "${newParentVersion}" \
+        --output ${newPomFile} \
+        ${xsltFile} \
+        ${pomFile}
+
+    local xsltprocStatus=$?
+
+    if [ ${xsltprocStatus} -eq 0 ] ; then
+        mv ${newPomFile} ${pomFile}
+    else
+        rm -f ${newPomFile}
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+function myLog () {
+
+    if [ ${_isQuiet} != true ] ; then
+        aktLog "$@"
+    else
+        : # Show no logging.
+    fi
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function getRelativePath () {
+
+    local path=$1
+    local basePath=$2
+
+    python -c "import os.path; print os.path.relpath('${path}', '${basePath}')"
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+main "$@"

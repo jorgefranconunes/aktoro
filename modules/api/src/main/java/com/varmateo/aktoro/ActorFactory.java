@@ -25,7 +25,7 @@ public interface ActorFactory<T> {
      *
      * <p>The factory method will receive the <code>{@link
      * ActorRef}</code> with which the new actor instance will be
-     * associated to.</code>
+     * associated to.</p>
      *
      * @param actorSelf The actor reference that the returned actor
      * instance will be associated to.
