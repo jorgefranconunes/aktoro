@@ -187,8 +187,8 @@ import com.varmateo.aktoro.SequentialExecutor;
                 throws Throwable {
 
             CompletableFuture<Object> future = new CompletableFuture<>();
-            Runnable task =
-                    () -> doInvokeNonVoidMethod(_actorCore, method, args,future);
+            Runnable task = () -> doInvokeNonVoidMethod(
+                    _actorCore, method, args,future);
 
             _executor.execute(task);
 

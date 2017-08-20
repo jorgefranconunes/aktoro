@@ -1,0 +1,22 @@
+#
+# Travis CI job configuration for the Aktoro project.
+#
+# https://travis-ci.org/
+#
+
+language: java
+
+jdk:
+  - oraclejdk8
+
+script:
+  - ./devtools/bin/build-travisci-job --run
+
+cache:
+  directories:
+    - $HOME/.m2
+
+addons:
+  apt:
+    packages:
+      - xsltproc
