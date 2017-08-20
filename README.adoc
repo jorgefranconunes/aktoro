@@ -1,3 +1,7 @@
+image:https://travis-ci.org/jorgefranconunes/aktoro.svg?branch=master["Build Status", link="https://travis-ci.org/jorgefranconunes/aktoro"]
+image:https://codecov.io/gh/jorgefranconunes/aktoro/branch/master/graph/badge.svg[codecov, link="https://codecov.io/gh/jorgefranconunes/aktoro"]
+
+
 == Aktoro Project
 
 Aktoro is an actor library for Java.
