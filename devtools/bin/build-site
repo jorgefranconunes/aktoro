@@ -1,0 +1,418 @@
+#!/bin/bash
+###########################################################################
+#
+# Copyright (c) 2017 Aktoro project contributors.
+#
+#
+# Generates the Aktoro static site and optionally uploads it to the
+# GithHub pages repository.
+#
+###########################################################################
+
+_scriptName=$0
+_scriptDir=$(dirname $0)
+_aktHome=$(cd $_scriptDir/../..; pwd)
+
+source ${_aktHome}/lib/bash/aktoro-utils.sh
+source ${_aktHome}/conf/aktoro-defaults.conf
+
+
+
+
+
+TOOL_NAME="Aktoro Site Baker"
+PRODUCT_HEADER="${AKT_PRODUCT_NAME} ${AKT_VERSION} - ${TOOL_NAME}"
+
+SITE_REPO="git@github.com:jorgefranconunes/aktoro.git"
+SITE_BRANCH="gh-pages"
+SITE_YAWG_VERSION=0.9.7
+SITE_YAWG_BASEDIR=yawg-${SITE_YAWG_VERSION}
+SITE_YAWG_TARBALL=https://github.com/jorgefranconunes/yawg/releases/download/v${SITE_YAWG_VERSION}/${SITE_YAWG_BASEDIR}.tar.bz2
+
+DEFAULT_COMMIT_COMMENT="Doc updates"
+
+_workingArea=
+_isInit=false
+_isUpload=false
+_isProduction=false
+_lastUpdateTimestamp=
+_commitComment=${DEFAULT_COMMIT_COMMENT}
+_outputDir=${_aktHome}/target
+_yawgTool=
+_yawgToolType=PRODUCTION
+_yawgToolInstallRoot=${_outputDir}/tools
+
+
+
+
+
+#######################################################################
+#
+# The main script.
+#
+#######################################################################
+
+function main () {
+
+    processCliArgs "$@"
+
+    _workingArea=${_outputDir}/site
+    mkdir -p ${_workingArea}
+
+    aktLog "${PRODUCT_HEADER}"
+
+    # Small hack. This directory is expected to exist by some Yawg
+    # config files. But it would have been created and populated only
+    # if `build-bundle --with-reports` was previously run. So we
+    # preemptively create it in order not to blow up when running
+    # `build-site` manually.
+    mkdir -p ${_outputDir}/CodeQualityReports
+
+    doBakeSite || aktError "Failed building site."
+
+    aktLog "Done building site."
+}
+
+
+
+
+
+###########################################################################
+#
+# Processes the command line options.
+#
+###########################################################################
+
+function processCliArgs () {
+
+    for option in "$@" ; do
+        case $option in
+            --init )
+                _isInit=true
+                ;;
+            --upload )
+                _isInit=true
+                _isUpload=true
+                _isProduction=true;
+                _yawgToolType=PRODUCTION
+                ;;
+            --final )
+                _isProduction=true;
+                ;;
+            --yawg=* )
+                _yawgTool=$(expr "$option" : '--yawg=\(.*\)')
+                _yawgToolType=PROVIDED
+                ;;
+            --yawg-latest )
+                _yawgToolType=PRODUCTION
+                ;;
+            --yawg-install-root=* )
+                _yawgToolInstallRoot=$(expr "$option" : '--yawg-install-root=\(.*\)')
+                ;;
+            --help )
+                displayHelp
+                exit 0
+                ;;
+            --*=* )
+                option=$(expr $option : '\(--.*\)=.*')
+                aktError "$option : unknown option. Use --help for details."
+                ;;
+            * )
+                aktError "$option : unknown option. Use --help for details."
+                ;;
+        esac
+    done
+}
+
+
+
+
+
+###########################################################################
+#
+# Displays an help messages describing the configuration options.
+#
+###########################################################################
+
+function displayHelp () {
+
+    cat <<EOF
+
+${PRODUCT_HEADER}
+${AKT_COPYRIGHT_HEADER}
+
+Builds the Aktoro site and optionally publishs it to Github.
+
+Available options:
+
+--init
+    Initialize directory to be used as working area for site
+    files. Only useful for troubleshooting.
+
+--upload
+    Uploads the bake result to the Aktoro site, replacing the previous
+    contents with the bake result. Implies --init, --final, and
+    --yawg-latest
+
+--final
+    Generates the site ready for uploading to the final production
+    location. If this option not specified then a visual indicator is
+    added to the site to inform readers that it is not an official
+    release.
+
+--yawg=PATH
+    Path of the'yawg' tool to be used. By default it will use the
+    'yawg' tool in the project working area.
+
+--yawg-latest
+    Use the latest official release of Yawg for performing the bake.
+
+--yawg-install-root=PATH
+    Path of directory where the official release of Yawg will be
+    installed. Only relevant when used with --yawg-latest. It will be
+    ignored otherwise. When not specified it will default to
+    'target/tools'.
+
+--help
+    Prints this help text.
+
+EOF
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function doBakeSite () {
+
+    true \
+        && setupYawgTool \
+        && setupWorkingArea \
+        && doBaking \
+        && uploadChangesIfDesired
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function setupYawgTool () {
+
+    case "${_yawgToolType}" in
+        PRODUCTION )
+            _yawgTool=${_yawgToolInstallRoot}/${SITE_YAWG_BASEDIR}/bin/yawg
+            if [ -x ${_yawgTool} ] ; then
+                aktLog "Already installed Yawg ${SITE_YAWG_VERSION}."
+            else
+                aktLog "Installing Yawg ${SITE_YAWG_VERSION}..."
+                installYawgTool
+            fi
+            ;;
+        *)
+            : # All is already setup.
+            ;;
+    esac
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function installYawgTool () {
+
+    local installRootDir=${_yawgToolInstallRoot}
+
+    rm -rf ${installRootDir}/${SITE_YAWG_BASEDIR}
+    ${_scriptDir}/build-tarball-install \
+                 --tarball=${SITE_YAWG_TARBALL} \
+                 --root=${installRootDir}
+
+    local exitStatus=$?
+
+    if [ ${exitStatus} -ne 0 ] ; then
+        # No need to display an error message, because
+        # build-tarball-install already displayed the right error
+        # message.
+        exit ${exitStatus}
+    fi
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function setupWorkingArea () {
+
+    local lastUpdateTimestamp=
+
+    if [ ${_isInit} == true -o ${_isUpload} == true ] ; then
+        doSetupWorkingArea
+        pushd ${_aktHome} > /dev/null
+        lastUpdateTimestamp=$(git log -1 --format=format:%cD doc/content/)
+        popd > /dev/null
+    else
+        lastUpdateTimestamp=$(date --rfc-2822)
+    fi
+
+    _lastUpdateTimestamp=$(date --date="${lastUpdateTimestamp}" --utc "+%Y-%m-%d %H:%M UTC")
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function doSetupWorkingArea () {
+
+    aktLog "Setting up working area..."
+
+    local exitStatus=0
+
+    if [ ! -d ${_workingArea}/.git ] ; then
+        rm -rf ${_workingArea}
+        local username=$(git --git-dir ${_aktHome}/.git config user.name)
+        local email=$(git --git-dir ${_aktHome}/.git config user.email)
+
+        mkdir ${_workingArea} || aktError "Unable to create ${_workingArea}"
+        pushd ${_workingArea} > /dev/null
+        true \
+            && git clone -b ${SITE_BRANCH} ${SITE_REPO} . \
+            && git config user.name ${username} \
+            && git config user.email ${email}
+
+        exitStatus=$?
+        popd  > /dev/null
+    else
+        pushd ${_workingArea} > /dev/null
+        true \
+            && git reset --hard HEAD \
+            && git checkout -- . \
+            && git pull origin ${SITE_BRANCH} \
+            && rm -rf ./*
+
+        exitStatus=$?
+        popd  > /dev/null
+    fi
+
+    return ${exitStatus}
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function doBaking () {
+
+    aktLog "Starting Aktoro site bake..."
+    aktLog "    Yawg tool  : ${_yawgTool}"
+    aktLog "    Target dir : ${_workingArea}"
+
+    if [ -d "${_workingArea}" ] ; then
+        if [ $(ls ${_workingArea} | wc -l) -gt 0 ] ; then
+            rm -rf ${_workingArea}/*
+        fi
+    else
+        mkdir ${_workingArea} || aktError "Unable to create ${_workingArea}"
+    fi
+
+    ${_yawgTool} \
+        --source $(aktNormalizePath ${_aktHome}/doc/content) \
+        --target $(aktNormalizePath ${_workingArea}) \
+        --templates $(aktNormalizePath ${_aktHome}/doc/templates) \
+        --assets $(aktNormalizePath ${_aktHome}/doc/assets) \
+        --page-var "isProduction=${_isProduction}" \
+        --page-var "lastUpdateTimestamp=${_lastUpdateTimestamp}" \
+        --verbose
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function uploadChangesIfDesired () {
+
+    if [ ${_isUpload} == true ] ; then
+        doUploadChanges
+    fi
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function doUploadChanges () {
+
+    aktLog "Uploading changes to origin Git repo..."
+
+    local exitStatus=0
+
+    pushd ${_workingArea} > /dev/null
+    true \
+        && git add ./* \
+        && git commit -a -m "${_commitComment}" \
+        && git push origin ${SITE_BRANCH}
+
+    exitStatus=$?
+    popd > /dev/null
+
+    return ${exitStatus}
+}
+
+
+
+
+
+#######################################################################
+#
+# Entry point.
+#
+#######################################################################
+
+main "$@"

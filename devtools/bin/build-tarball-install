@@ -1,0 +1,333 @@
+#!/bin/bash
+###########################################################################
+#
+# Copyright (c) 2017 Aktoro project contributors.
+#
+#
+# Downloads a tarball and unpacks it at a given directory.
+#
+###########################################################################
+
+_scriptName=$0
+_scriptDir=$(dirname $0)
+_aktHome=$(cd ${_scriptDir}/../..; pwd)
+
+source ${_aktHome}/lib/bash/aktoro-utils.sh
+source ${_aktHome}/conf/aktoro-defaults.conf
+
+
+
+
+
+TOOL_NAME="Tarball installer"
+PRODUCT_HEADER="${AKT_PRODUCT_NAME} ${AKT_VERSION} - ${TOOL_NAME}"
+
+_tarballUrl=
+_installRootDir=
+_isForceInstall=false
+_localTarball=
+
+
+
+
+
+#######################################################################
+#
+# The main script.
+#
+#######################################################################
+
+function main () {
+
+    processCliArgs "$@"
+    showConfig
+
+    true \
+        && sanityChecks ${_tarballUrl} ${_installRootDir} \
+        && fetchTarball ${_tarballUrl} \
+        && unpackTarball ${_localTarball} ${_installRootDir}
+
+    local status=$?
+
+    if [ ${status} -eq 0 ] ; then
+        aktLog "Successfully unpacked archive."
+    else
+        aktError "Archive $(basename ${_tarballUrl}) was not unpacked."
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# Processes the command line options.
+#
+###########################################################################
+
+function processCliArgs () {
+
+    for option in "$@" ; do
+        case "${option}" in
+            --tarball=* )
+                _tarballUrl=$(expr "$option" : '--tarball=\(.*\)')
+                ;;
+            --root=* )
+                _installRootDir=$(expr "$option" : '--root=\(.*\)')
+                ;;
+            --force-install )
+                _isForceInstall=true
+                ;;
+            --help )
+                displayHelp
+                exit 0
+                ;;
+            --*=* )
+                option=$(expr $option : '\(--.*\)=.*')
+                aktError "$option : unknown option. Use --help for details."
+                ;;
+            * )
+                aktError "$option : unknown option. Use --help for details."
+                ;;
+        esac
+    done
+
+    if [ -z "${_tarballUrl}" ] ; then
+        aktError "Missing mandatory --tarball option. Use --help for details."
+    fi
+
+    if [ -z "${_installRootDir}" ] ; then
+        aktError "Missing mandatory --root option. Use --help for details."
+    fi
+}
+
+
+
+
+
+
+###########################################################################
+#
+# Displays an help messages describing the configuration options.
+#
+###########################################################################
+
+function displayHelp () {
+
+    cat <<EOF
+
+${PRODUCT_HEADER}
+${AKT_COPYRIGHT_HEADER}
+
+Downloads and unpacks a tarball or ZIP archive under a given
+directory.
+
+Available options:
+
+--tarball=URL
+    File system path or URL where the tarball is located.
+
+--root=PATH
+    Path of the directory under which the tarball will be unpacked. If
+    this directory does not exist then it will be created.
+
+--force-install
+    Perform the download and unpacking of the archive even if the
+    destination directory already exists.
+
+--help
+    Prints this help text.
+
+EOF
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function showConfig () {
+
+    aktLog "${PRODUCT_HEADER}"
+    aktLog "    Tarball      : ${_tarballUrl}"
+    aktLog "    Install root : ${_installRootDir}"
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function sanityChecks () {
+
+    local tarball=$1
+    local installRootDir=$2
+
+    #
+    # Check if there is already an (aparently) unpacked archive in the
+    # installroot dir.
+    #
+    local tarballBasename=$(basename ${tarball})
+    local extRegex=
+
+    case ${tarballBasename} in
+        *.tar.gz )
+            extRegex='\(.*\)\.tar\.gz'
+            ;;
+        *.tgz )
+            extRegex='\(.*\)\.tgz'
+            ;;
+        *.tar.bz2 )
+            extRegex='\(.*\)\.tar\.bz2'
+            ;;
+        *.zip )
+            extRegex='\(.*\)\.zip'
+            ;;
+        * )
+            aktError "Unknow archive type $(basename ${tarball})"
+            ;;
+    esac
+
+    local tarballName=$(expr "${tarballBasename}" : "${extRegex}")
+    local installDir=${installRootDir}/${tarballName}
+
+    if [ -d ${installDir} ] ; then
+        local msg="Destination directory already exists: ${installDir}"
+
+        if [ ${_isForceInstall} == true ] ; then
+            aktLog ${msg}
+            aktLog "Proceeding as ordered by --force-install"
+        else
+            aktError "${msg}"
+        fi
+    fi
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function fetchTarball () {
+
+    local tarballUrl=$1
+
+    if expr match "${tarballUrl}" http > /dev/null ; then
+        downloadTarball "${tarballUrl}"
+    else
+        # We assume it is a file system path.
+        _localTarball=${tarballUrl}
+
+        aktLog "Tarball is a file system path."
+    fi
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function downloadTarball () {
+
+    local tarballUrl=$1
+    local tarballBasename=$(basename ${tarballUrl})
+
+    aktLog "Downloading ${tarballUrl} ..."
+
+    local result=0
+
+    #
+    # Create a temporary folder to receive the tarball. It will be
+    # removed when the script exits.
+    #
+    local localTarballDir=$(mktemp --directory --tmpdir akt-XXXXXX)
+    local localTarball=${localTarballDir}/${tarballBasename}
+    trap "rm -rf ${localTarballDir}" 0
+
+    if wget \
+           --no-verbose \
+           --output-document=${localTarball} \
+           ${tarballUrl} ; then
+
+        aktLog "Tarball downloaded to ${localTarball}"
+        _localTarball=${localTarball}
+    else
+        result=1
+        aktLog "Failed to download tarball ${tarballUrl}"
+    fi
+
+    return ${result}
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function unpackTarball () {
+
+    local tarball=$1
+    local installRootDir=$2
+
+    aktLog "Unpacking $(basename ${tarball}) under ${installRootDir}..."
+
+    mkdir -p ${installRootDir} \
+        || aktError "Unable to create install root dir ${installRootDir}"
+
+    case ${tarball} in
+        *.tar.gz )
+            tar -xzf ${tarball} -C ${installRootDir}
+            ;;
+        *.tgz )
+            tar -xzf ${tarball} -C ${installRootDir}
+            ;;
+        *.tar.bz2 )
+            tar -xjf ${tarball} -C ${installRootDir}
+            ;;
+        *.zip )
+            unzip ${tarball} -d ${installRootDir}
+            ;;
+        * )
+            aktError "Unknow archive type $(basename ${tarball})"
+            ;;
+    esac
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+main "$@"
+

@@ -1,0 +1,23 @@
+= Aktoro Development
+
+Here you will find information intended for the developers of the Aktoro
+project.
+
+
+* Project Gitlab page: https://gitlab.com/jorgefranconunes/aktoro
+
+* Git repo: `git@gitlab.com:jorgefranconunes/aktoro.git`
+
+
+
+
+
+== Code quality
+
+image:https://travis-ci.org/jorgefranconunes/aktoro.svg?branch=master["Build Status", link="https://travis-ci.org/jorgefranconunes/aktoro"]
+image:https://codecov.io/gh/jorgefranconunes/aktoro/branch/master/graph/badge.svg[codecov, link="https://codecov.io/gh/jorgefranconunes/aktoro"]
+image:https://api.codacy.com/project/badge/Grade/5a8509efe93441eaafc869854e8a5dcf["Codacy code quality", link="https://www.codacy.com/app/jorgefranconunes/aktoro?utm_source=github.com&utm_medium=referral&utm_content=jorgefranconunes/aktoro&utm_campaign=Badge_Grade"]
+
+link:CodeQualityReports/index.html[Code quality reports] - Maven
+generated reports for the latest commit in the `master` branch.
+
