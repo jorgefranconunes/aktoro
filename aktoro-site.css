@@ -1,0 +1,126 @@
+
+html, body {
+    height: 100%;
+}
+
+body {
+  padding-top: 50px;
+}
+
+.akt-body {
+    min-height: 100%;
+    position: relative;
+}
+
+.akt-content {
+    padding-bottom: 6em; /* Must be same as akt-footer.height */
+}
+
+.akt-footer {
+    height: 6em;
+    padding-top: 2em;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.akt-footer p {
+    margin: 0;
+}
+
+
+/**
+ * Bootstrap classes.
+ */
+
+.breadcrumb {
+    margin-top: 20px;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 1024px;
+    }
+}
+
+.jumbotron {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.col-md-4 > ul {
+    list-style-position: outside;
+    padding: 0 0 0 1em;
+}
+.col-md-4 > h3 {
+    text-align: center;
+}
+
+
+/**
+ * Asccidoctor classes.
+ */
+
+.toc {
+    border: 0.1em solid #ccc;
+    border-radius: 0.4em;
+    padding: 1em 2em;
+    margin: 1em 0 2em 0;
+    display: inline-block;
+}
+
+.toc > div {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.toc ul {
+    list-style-position: inside;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0 1em;
+    text-indent: -1em;
+}
+
+.toc li {
+    white-space: nowrap;
+}
+
+.imageblock {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    text-align: center;
+}
+
+.listingblock {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+table.tableblock {
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+}
+
+table.tableblock > thead > tr:first-child > th {
+    border-top: 0;
+}
+
+table.tableblock > thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+}
+
+table.tableblock > thead > tr > th,
+table.tableblock > tbody > tr > td {
+    padding: 0.5em;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+td > p.tableblock:last-child {
+    margin: 0;
+}
