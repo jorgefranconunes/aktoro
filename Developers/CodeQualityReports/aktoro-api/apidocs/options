@@ -1,0 +1,24 @@
+-encoding
+'UTF-8'
+-protected
+-quiet
+-sourcepath
+'/home/travis/build/jorgefranconunes/aktoro/modules/api/src/main/java:/home/travis/build/jorgefranconunes/aktoro/modules/api/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2017. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/travis/build/jorgefranconunes/aktoro/modules/api/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Aktoro API 0.0.1-201708221741 API'
+-linkoffline
+'http://docs.oracle.com/javase/8/docs/api' '/home/travis/build/jorgefranconunes/aktoro/modules/api/target/javadoc-bundle-options'
+-splitindex
+-use
+-version
+-windowtitle
+'Aktoro API 0.0.1-201708221741 API'
