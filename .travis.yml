@@ -23,3 +23,24 @@ addons:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+
+#
+# Preparation for uploading changes to the Yawg site.
+#
+before_deploy:
+  - eval "$(ssh-agent -s)"
+  - openssl aes-256-cbc -K $encrypted_0812d5e2c4f1_key -iv $encrypted_0812d5e2c4f1_iv -in ./devtools/conf/id_rsa-travisci-aktoro.enc -out ./devtools/conf/id_rsa-travisci-aktoro -d
+  - chmod 600 ./devtools/conf/id_rsa-travisci-aktoro
+  - ssh-add ./devtools/conf/id_rsa-travisci-aktoro
+
+#
+# Bakes a new release of the Yawg site and uploads the changes to the
+# GitHub pages repo.
+#
+deploy:
+  skip_cleanup: true
+  on:
+    branch: master
+  provider: script
+  script: ./devtools/bin/build-site --yawg-install-root=$HOME/.yawgdevtools --upload
