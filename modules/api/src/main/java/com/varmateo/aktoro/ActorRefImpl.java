@@ -107,7 +107,7 @@ import com.varmateo.aktoro.SequentialExecutor;
         /**
          *
          */
-        ProxyActorInvocationHandler(final Executor executor) {
+        /* default */ ProxyActorInvocationHandler(final Executor executor) {
 
             _executor = executor;
         }

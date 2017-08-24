@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.varmateo.aktoro.DefaultActorSystem;
 import com.varmateo.aktoro.ActorSystem;
 
 
@@ -37,7 +38,7 @@ public final class PingPongTest {
     @Before
     public void setUp() {
 
-        _actorSystem = new ActorSystem(_executor);
+        _actorSystem = DefaultActorSystem.create(_executor);
     }
 
 

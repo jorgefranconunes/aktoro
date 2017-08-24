@@ -6,32 +6,13 @@
 
 package com.varmateo.aktoro;
 
-import java.util.concurrent.Executor;
-
 import com.varmateo.aktoro.ActorFactory;
-import com.varmateo.aktoro.ActorRefImpl;
 
 
 /**
- * Manages a set of actors.
- *
- * <p>The actors managed by one given <code>ActorSystem</code> have
- * their methods executed by one of the threads in the
- * <code>Executor</code> specified at constructor time.</p>
+ * Contract for a manager of a set of actors.
  */
-public final class ActorSystem {
-
-
-    private final Executor _executor;
-
-
-    /**
-     * @param executor Used for executing actor methods.
-     */
-    public ActorSystem(final Executor executor) {
-
-        _executor = executor;
-    }
+public interface ActorSystem {
 
 
     /**
@@ -59,16 +40,8 @@ public final class ActorSystem {
      * interface. That object is a proxy for the actor instance
      * created with the <code>ActorFactory</code>.
      */
-    public <T> T createActor(
-            final ActorFactory<T> actorFactory,
-            final Class<T> actorType) {
-
-        ActorRefImpl<T> actorRef = new ActorRefImpl<>(actorType, _executor);
-        T actorCore = actorFactory.newActor(actorRef);
-
-        actorRef.setActorCore(actorCore);
-
-        return actorRef.self();
-    }
+    <T> T createActor(
+            ActorFactory<T> actorFactory,
+            Class<T> actorType);
 
 }

@@ -18,12 +18,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.varmateo.aktoro.ActorSystem;
+import com.varmateo.aktoro.ActorSystemImpl;
 
 
 /**
  *
  */
-public final class ActorSystemTest {
+public final class ActorSystemImplTest {
 
 
     private static final int MAX_THREADS = 4;
@@ -41,7 +42,7 @@ public final class ActorSystemTest {
     @Before
     public void setUp() {
 
-        _actorSystem = new ActorSystem(_executor);
+        _actorSystem = new ActorSystemImpl(_executor);
     }
 
 
