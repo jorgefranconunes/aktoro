@@ -14,11 +14,11 @@
 -docencoding
 'UTF-8'
 -doctitle
-'Aktoro API 0.0.1-201708240757 API'
+'Aktoro API 0.0.1-201708242025 API'
 -linkoffline
 'http://docs.oracle.com/javase/8/docs/api' '/home/travis/build/jorgefranconunes/aktoro/modules/api/target/javadoc-bundle-options'
 -splitindex
 -use
 -version
 -windowtitle
-'Aktoro API 0.0.1-201708240757 API'
+'Aktoro API 0.0.1-201708242025 API'
