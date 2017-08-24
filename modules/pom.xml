@@ -174,6 +174,15 @@ Copyright (c) 2017 Aktoro project contributors.
         </configuration>
       </plugin>
 
+
+      <!-- Deploy to OSSRH. This goal is bound to the deploy lifecycle
+           phase. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>${maven-deploy-plugin.version}</version>
+      </plugin>
+
     </plugins>
 
 
@@ -184,11 +193,18 @@ Copyright (c) 2017 Aktoro project contributors.
 
 
   <distributionManagement>
+
     <site>
       <id>aktoro.mavensite</id>
       <name>Aktoro Project Maven Reports</name>
       <url>file:///${aktoro.mavensite}/</url>
     </site>
+
+    <repository>
+      <id>aktoro.ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+
   </distributionManagement>
 
 
@@ -280,6 +296,30 @@ Copyright (c) 2017 Aktoro project contributors.
         </plugins>
       </build>
 
+    </profile>
+
+
+    <profile>
+      <id>aktoro-maven-artifacts</id>
+      <build>
+        <plugins>
+          <!-- Sign Maven artifacts -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${maven-gpg-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
 
 

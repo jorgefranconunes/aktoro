@@ -4,9 +4,9 @@ Here you will find information intended for the developers of the Aktoro
 project.
 
 
-* Project Gitlab page: https://gitlab.com/jorgefranconunes/aktoro
+* Project GitHub page: https://github.com/jorgefranconunes/aktoro
 
-* Git repo: `git@gitlab.com:jorgefranconunes/aktoro.git`
+* Git repo: `git@github.com:jorgefranconunes/aktoro.git`
 
 
 
