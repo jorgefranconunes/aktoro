@@ -10,14 +10,17 @@ import com.varmateo.aktoro.ActorRef;
 
 
 /**
- * Contract for a factory of actors.
+ * Contract for a factory of actor cores.
  *
  * <p>An <code>ActorFactory</code> is required for creating an actor
  * instance in the actor system through <code>{@link
- * ActorSystem#createActor(Class,ActorFactory)}</code>.
+ * ActorSystem#createActor(ActorFactory,Class,)}</code>.
+ *
+ * @param <T> The type of actor core objects created by this
+ * factory.
  */
 @FunctionalInterface
-public interface ActorFactory<T> {
+public interface ActorCoreFactory<T> {
 
 
     /**
@@ -32,6 +35,6 @@ public interface ActorFactory<T> {
      *
      * @return A new actor instance.
      */
-    T newActor(ActorRef<T> actorSelf);
+    T create(ActorRef<T> actorSelf);
 
 }

@@ -14,6 +14,14 @@ final class Fmt {
 
 
     /**
+     * No instances of this class are to be created.
+     */
+    private Fmt() {
+        // Nothing to do.
+    }
+
+
+    /**
      *
      */
     public static String nanosAsMillis(final long nanos) {

@@ -8,7 +8,7 @@ package com.varmateo.aktoro;
 
 import java.util.concurrent.Executor;
 
-import com.varmateo.aktoro.ActorFactory;
+import com.varmateo.aktoro.ActorCoreFactory;
 import com.varmateo.aktoro.ActorRefImpl;
 import com.varmateo.aktoro.ActorSystem;
 
@@ -39,11 +39,11 @@ import com.varmateo.aktoro.ActorSystem;
      * {@inheritDoc}
      */
     public <T> T createActor(
-            final ActorFactory<T> actorFactory,
+            final ActorCoreFactory<T> actorCoreFactory,
             final Class<T> actorType) {
 
         ActorRefImpl<T> actorRef = new ActorRefImpl<>(actorType, _executor);
-        T actorCore = actorFactory.newActor(actorRef);
+        T actorCore = actorCoreFactory.create(actorRef);
 
         actorRef.setActorCore(actorCore);
 

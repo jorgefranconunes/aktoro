@@ -25,6 +25,14 @@ final class SequentialExecutorTestUtils {
 
 
     /**
+     * No instances of this class are to be created.
+     */
+    private SequentialExecutorTestUtils() {
+        // Nothing to do.
+    }
+
+
+    /**
      *
      */
     public static void testParallelExecutionDuration(
@@ -42,16 +50,16 @@ final class SequentialExecutorTestUtils {
         List<Pojo> pojos = new ArrayList<>();
         List<Runnable> actions = new ArrayList<>();
 
-        for ( int i=0; i<pojoCount; i++ ) {
+        for ( int i=0; i<pojoCount; ++i ) {
             Pojo pojo = new Pojo();
             SequentialExecutor seqExecutor =
                     new SequentialExecutor(delegateExecutor);
             final int pojoIndex = i;
             Runnable action = () -> {
-                for ( int j=0; j<taskCountPerPojo; j++ ) {
+                for ( int j=0; j<taskCountPerPojo; ++j ) {
                     String value = "result-" + pojoIndex + "-" + j;
                     seqExecutor.execute(
-                            () -> pojo.doStuff(value, actionDuration,semaphore));
+                            () -> pojo.doStuff(value,actionDuration,semaphore));
                 }
             };
             pojos.add(pojo);
@@ -72,7 +80,7 @@ final class SequentialExecutorTestUtils {
         boolean isCompleted = semaphore.tryAcquire(
                 taskCount, maxExpectedDuration, TimeUnit.MILLISECONDS);
         assertThat(isCompleted).isTrue();
-        for ( int i=0; i<pojoCount; i++ ) {
+        for ( int i=0; i<pojoCount; ++i ) {
             for ( int j=0; j<taskCountPerPojo; ++j ) {
                 assertThat(pojos.get(i).getResult(j))
                         .isEqualTo("result-" + i + "-" + j);
@@ -100,7 +108,7 @@ final class SequentialExecutorTestUtils {
                 throw new IllegalStateException("concurrent access");
             }
 
-            ++ _counter;
+            ++_counter;
             doSleep(delay);
             --_counter;
             _results.add(value);
@@ -129,7 +137,7 @@ final class SequentialExecutorTestUtils {
 
         public String getResult(final int index) {
 
-            if ( _results.size() == 0 ) {
+            if ( _results.isEmpty() ) {
                 throw new IllegalStateException("Action has not been completed");
             }
 

@@ -86,7 +86,7 @@ public final class ActorSystemImplTest {
     /**
      *
      */
-    private static interface Dummy {
+    private interface Dummy {
 
         void saveValue(
                 int value,
