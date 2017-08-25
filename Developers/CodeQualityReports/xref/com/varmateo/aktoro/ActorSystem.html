@@ -14,7 +14,7 @@
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">package</strong> com.varmateo.aktoro;
 <a class="jxr_linenumber" name="L8" href="#L8">8</a>   
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> com.varmateo.aktoro.ActorFactory;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> com.varmateo.aktoro.ActorCoreFactory;
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_javadoccomment">/**</em>
@@ -27,17 +27,17 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment">     * Creates a new actor.</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment">     * &lt;p&gt;A new actor instance is created through the provided</em>
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment">     * &lt;code&gt;{@link ActorFactory}&lt;/code&gt;. A proxy for that actor</em>
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment">     * &lt;code&gt;{@link ActorCoreFactory}&lt;/code&gt;. A proxy for that actor</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">     * instance will then be returned. The actor proxy is the visible</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">     * face of the actor for the outside world. The actor proxy,</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">     * working within the actor system, has the responsability to</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">     * ensure the actor methods are called in sequence, and never</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">     * concurrently.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">     * @param &lt;T&gt; Type of objects to be created. This will have to be</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">     * an interface type.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">     * @param &lt;T&gt; Type of objects to be created. This must be an</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">     * interface type.</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">     *</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">     * @param actorFactory Used for creating an actual actor</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">     * @param actorCoreFactory Used for creating an actual actor core</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">     * instance.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">     * @param actorType The class object of the interface the actor</em>
@@ -46,10 +46,10 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     *</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     * @return An object implementing the given &lt;code&gt;actorType&lt;/code&gt;</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">     * interface. That object is a proxy for the actor instance</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     * created with the &lt;code&gt;ActorFactory&lt;/code&gt;.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">     * created with the &lt;code&gt;ActorCoreFactory&lt;/code&gt;.</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>      &lt;T&gt; T createActor(
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>              ActorFactory&lt;T&gt; actorFactory,
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>              ActorCoreFactory&lt;T&gt; actorCoreFactory,
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>              Class&lt;T&gt; actorType);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  }
