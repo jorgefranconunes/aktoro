@@ -20,19 +20,19 @@ under the License.
 <rss version="0.91">
   <channel>
     <title>Aktoro API - Checkstyle report</title>
-    <link>${project.url}</link>
+    <link>http://aktoro.varmateo.com/aktoro-api/</link>
     <description>Aktoro API - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2017</copyright>
     <item>
       <title>File: 8,
-             Errors: 2,
+             Errors: 0,
              Warnings: 0,
              Infos: 0
       </title>
-            <link>${project.url}/checkstyle.html</link>
+            <link>http://aktoro.varmateo.com/aktoro-api//checkstyle.html</link>
       <description>
-        <p>Click <a href="${project.url}/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -46,21 +46,7 @@ under the License.
           <tbody>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#com.varmateo.aktoro.ActorRefImpl.java">com/varmateo/aktoro/ActorRefImpl.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="${project.url}/checkstyle.html#com.varmateo.aktoro.DefaultActorSystem.java">com/varmateo/aktoro/DefaultActorSystem.java</a>
+                  <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html#com.varmateo.aktoro.ActorRefImpl.java">com/varmateo/aktoro/ActorRefImpl.java</a>
                 </td>
                 <td>
                   0
@@ -74,7 +60,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#com.varmateo.aktoro.SequentialExecutor.java">com/varmateo/aktoro/SequentialExecutor.java</a>
+                  <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html#com.varmateo.aktoro.DefaultActorSystem.java">com/varmateo/aktoro/DefaultActorSystem.java</a>
                 </td>
                 <td>
                   0
@@ -88,7 +74,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#com.varmateo.aktoro.ActorSystem.java">com/varmateo/aktoro/ActorSystem.java</a>
+                  <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html#com.varmateo.aktoro.SequentialExecutor.java">com/varmateo/aktoro/SequentialExecutor.java</a>
                 </td>
                 <td>
                   0
@@ -102,7 +88,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#com.varmateo.aktoro.ActorSystemImpl.java">com/varmateo/aktoro/ActorSystemImpl.java</a>
+                  <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html#com.varmateo.aktoro.ActorSystem.java">com/varmateo/aktoro/ActorSystem.java</a>
                 </td>
                 <td>
                   0
@@ -116,21 +102,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#com.varmateo.aktoro.ActorRef.java">com/varmateo/aktoro/ActorRef.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  1
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="${project.url}/checkstyle.html#com.varmateo.aktoro.package-info.java">com/varmateo/aktoro/package-info.java</a>
+                  <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html#com.varmateo.aktoro.ActorSystemImpl.java">com/varmateo/aktoro/ActorSystemImpl.java</a>
                 </td>
                 <td>
                   0
@@ -144,7 +116,35 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#com.varmateo.aktoro.ActorCoreFactory.java">com/varmateo/aktoro/ActorCoreFactory.java</a>
+                  <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html#com.varmateo.aktoro.ActorRef.java">com/varmateo/aktoro/ActorRef.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html#com.varmateo.aktoro.package-info.java">com/varmateo/aktoro/package-info.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://aktoro.varmateo.com/aktoro-api//checkstyle.html#com.varmateo.aktoro.ActorCoreFactory.java">com/varmateo/aktoro/ActorCoreFactory.java</a>
                 </td>
                 <td>
                   0
