@@ -16,13 +16,14 @@ package com.varmateo.aktoro;
  * context.</p>
  *
  * <p>When an actor is created an <code>ActorRef</code> instance is
- * passed to its factory (see
- * <code>{@link ActorSystem#createActor(Class,ActorFactory)}</code>. The
- * actor can then use that <code>ActorRef</code> to execute lambdas,
- * by calling <code>{@link #perform(Runnable)}</code>, or to pass references
- * of itself to outside, by calling <code>{@link #self()}</code>.</p>
+ * passed to its factory (see <code>{@link
+ * ActorSystem#createActor(ActorCoreFactory,Class)}</code>. The actor
+ * can then use that <code>ActorRef</code> to execute lambdas, by
+ * calling <code>{@link #perform(Runnable)}</code>, or to pass
+ * references of itself to outside, by calling <code>{@link
+ * #self()}</code>.</p>
  *
- * @param T The type of the actor.
+ * @param <T> The type of the actor.
  */
 public interface ActorRef<T> {
 

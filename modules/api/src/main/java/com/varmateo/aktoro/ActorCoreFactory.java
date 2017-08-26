@@ -14,7 +14,7 @@ import com.varmateo.aktoro.ActorRef;
  *
  * <p>An <code>ActorFactory</code> is required for creating an actor
  * instance in the actor system through <code>{@link
- * ActorSystem#createActor(ActorFactory,Class,)}</code>.
+ * ActorSystem#createActor(ActorCoreFactory,Class)}</code>.
  *
  * @param <T> The type of actor core objects created by this
  * factory.

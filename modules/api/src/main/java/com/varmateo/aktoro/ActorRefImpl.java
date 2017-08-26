@@ -21,6 +21,8 @@ import com.varmateo.aktoro.SequentialExecutor;
 /**
  * An internal implementation of <code>ActorRef</code> intended to be
  * used solely by the <code>ActorSystem</code> implementation.
+ *
+ * @param <T> The type of the actor.
  */
 /* default */ final class ActorRefImpl<T>
         implements ActorRef<T> {
@@ -35,6 +37,8 @@ import com.varmateo.aktoro.SequentialExecutor;
      *
      * @param actorType The class object of the interface the actor
      * instance implements.
+     *
+     * @param actorType The type of the actor.
      *
      * @param executor Used for executing actors methods.
      */

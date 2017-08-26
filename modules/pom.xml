@@ -44,6 +44,7 @@ Copyright (c) 2017 Aktoro project contributors.
     <maven-pmd-plugin.version>3.7</maven-pmd-plugin.version>
     <maven-project-info-reports-plugin.version>2.8</maven-project-info-reports-plugin.version>
     <maven-site-plugin.version>3.4</maven-site-plugin.version>
+    <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
     <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
     <maven-surefire-report-plugin.version>2.18.1</maven-surefire-report-plugin.version>
     <mockito-core.version>2.2.27</mockito-core.version>
@@ -192,25 +193,6 @@ Copyright (c) 2017 Aktoro project contributors.
 
 
 
-  <distributionManagement>
-
-    <site>
-      <id>aktoro.mavensite</id>
-      <name>Aktoro Project Maven Reports</name>
-      <url>file:///${aktoro.mavensite}/</url>
-    </site>
-
-    <repository>
-      <id>aktoro.ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-
-  </distributionManagement>
-
-
-
-
-
   <!-- -->
   <profiles>
 
@@ -329,6 +311,26 @@ Copyright (c) 2017 Aktoro project contributors.
 
 
 
+  <!-- -->
+  <distributionManagement>
+
+    <site>
+      <id>aktoro.mavensite</id>
+      <name>Aktoro Project Maven Reports</name>
+      <url>file:///${aktoro.mavensite}/</url>
+    </site>
+
+    <repository>
+      <id>aktoro.ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+
+  </distributionManagement>
+
+
+
+
+
   <!--
       Report configuration. This refers to the reports that are
       included in the Maven generated site. The information on that
@@ -373,7 +375,7 @@ Copyright (c) 2017 Aktoro project contributors.
           <version>true</version>
           <use>true</use>
           <quiet>true</quiet>
-          <failOnError>false</failOnError>
+          <failOnError>true</failOnError>
           <aggregate>false</aggregate>
         </configuration>
         <reportSets>
@@ -477,7 +479,16 @@ Copyright (c) 2017 Aktoro project contributors.
 
   <description>Actor library for Java.</description>
 
+  <url>http://aktoro.varmateo.com/</url>
+
   <inceptionYear>2017</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>GNU General Public License (GPL) version 3.0</name>
+      <url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+    </license>
+  </licenses>
 
   <developers>
     <developer>
@@ -486,6 +497,12 @@ Copyright (c) 2017 Aktoro project contributors.
       <email>jorgefranconunes@gmail.com</email>
     </developer>
   </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/jorgefranconunes/aktoro.git</connection>
+    <developerConnection>scm:git:ssh://github.com:jorgefranconunes/aktoro.git</developerConnection>
+    <url>http://github.com/jorgefranconunes/aktoro/tree/master</url>
+</scm>
 
 
 </project>

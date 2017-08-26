@@ -147,7 +147,7 @@ final class SequentialExecutorTestUtils {
 
         public List<String> getResults() {
 
-            if ( _results.size() == 0 ) {
+            if ( _results.isEmpty() ) {
                 throw new IllegalStateException("Action has not been completed");
             }
 
