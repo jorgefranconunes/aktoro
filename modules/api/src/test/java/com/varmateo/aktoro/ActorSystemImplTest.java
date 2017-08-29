@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.After;
@@ -59,7 +60,7 @@ public final class ActorSystemImplTest {
      *
      */
     @Test
-    public void whenActorCreated_thenVoidMethodInvocationWorks()
+    public void whenVoidMethodInvoked_thenItIsExecuted()
             throws Exception {
 
         DummyActor actor = new DummyActor();
@@ -86,11 +87,57 @@ public final class ActorSystemImplTest {
     /**
      *
      */
+    @Test
+    public void whenNonVoidMethodInvoked_thenItIsExecutedSynchronously() {
+
+        DummyActor actor = new DummyActor();
+        Dummy dummy = _actorSystem.createActor(
+                actorRef -> actor,
+                Dummy.class);
+
+        // WHEN
+        String originalArgument = "Hello, world!";
+        String returnValue = dummy.identity(originalArgument);
+
+        // THEN
+        assertThat(returnValue).isEqualTo(originalArgument);
+    }
+
+
+    /**
+     *
+     */
+    @Test
+    public void whenNonVoidMethodThrowsUncheckedExceptionInCore_thenActorThrowsSameException() {
+
+        DummyActor actor = new DummyActor();
+        Dummy dummy = _actorSystem.createActor(
+                actorRef -> actor,
+                Dummy.class);
+
+        // WHEN
+        RuntimeException originalError =
+                new IllegalStateException("just testing");
+        Throwable actualError = catchThrowable(
+                () -> dummy.raiseUncheckedExceptionInNonVoidMethod(originalError));
+
+        // THEN
+        assertThat(actualError).isSameAs(originalError);
+    }
+
+
+    /**
+     *
+     */
     private interface Dummy {
 
         void saveValue(
                 int value,
                 Runnable completionCallback);
+
+        String identity(String something);
+
+        Throwable raiseUncheckedExceptionInNonVoidMethod(RuntimeException errror);
     }
 
 
@@ -123,6 +170,26 @@ public final class ActorSystemImplTest {
         public int getValue() {
 
             return _value;
+        }
+
+
+        /**
+         *
+         */
+        @Override
+        public String identity(final String something) {
+
+            return something;
+        }
+
+
+        /**
+         *
+         */
+        @Override
+        public Throwable raiseUncheckedExceptionInNonVoidMethod(final RuntimeException error) {
+
+            throw error;
         }
 
 
