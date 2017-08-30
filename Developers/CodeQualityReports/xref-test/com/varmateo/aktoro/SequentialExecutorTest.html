@@ -96,7 +96,7 @@
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>          Semaphore semaphore = <strong class="jxr_keyword">new</strong> Semaphore(1);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>          <a href="../../../com/varmateo/aktoro/SequentialExecutorTestUtils.html">Pojo</a> pojo = <strong class="jxr_keyword">new</strong> <a href="../../../com/varmateo/aktoro/SequentialExecutorTestUtils.html">Pojo</a>();
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>          Runnable taskFail = () -&gt; pojo.throwError(0);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>          Runnable taskFail = () -&gt; pojo.raiseError(0);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>          Runnable taskOk = () -&gt; pojo.doStuff(<span class="jxr_string">"Hello, world!"</span>, 0, semaphore);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>          <em class="jxr_comment">// WHEN</em>
