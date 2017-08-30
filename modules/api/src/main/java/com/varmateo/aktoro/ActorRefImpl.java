@@ -192,7 +192,7 @@ import com.varmateo.aktoro.SequentialExecutor;
 
             CompletableFuture<Object> future = new CompletableFuture<>();
             Runnable task = () -> doInvokeNonVoidMethod(
-                    _actorCore, method, args,future);
+                    _actorCore, method, args, future);
 
             _executor.execute(task);
 

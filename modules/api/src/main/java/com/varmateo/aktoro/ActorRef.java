@@ -33,7 +33,7 @@ public interface ActorRef<T> {
      * given action will be executed as if it had been called as a
      * method of this actor. This means that when the given action is
      * being executed no other thread will be executing methods of the
-     * actor. Also, this method dos not block, and returns without
+     * actor. Also, this method does not block, and returns without
      * waiting for the action to complete.
      *
      * @param action The action to be executed.

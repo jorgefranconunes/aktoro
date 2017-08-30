@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * <p>Why do we need this instead of just using a an executor from
  * <code>Executors.singleThreadExecutor()</code>? Because it allows to
- * serialize executions in multiple pipeline (one
+ * serialize executions in multiple pipelines (one
  * <code>SequentialExecutor</code> per pipeline) without requiring one
  * thread per each pipeline.</p>
  */
@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
     /**
      *
      */
-    SequentialExecutor(final Executor delegateExecutor) {
+    /* default */ SequentialExecutor(final Executor delegateExecutor) {
 
         _lock = new AtomicBoolean(true);
         _mailbox =  new ConcurrentLinkedQueue<>();

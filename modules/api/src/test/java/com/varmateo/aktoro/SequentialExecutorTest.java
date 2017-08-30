@@ -88,7 +88,7 @@ public final class SequentialExecutorTest {
 
         Semaphore semaphore = new Semaphore(1);
         Pojo pojo = new Pojo();
-        Runnable taskFail = () -> pojo.throwError(0);
+        Runnable taskFail = () -> pojo.raiseError(0);
         Runnable taskOk = () -> pojo.doStuff("Hello, world!", 0, semaphore);
 
         // WHEN

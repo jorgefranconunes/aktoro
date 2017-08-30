@@ -11,13 +11,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.mockito.ArgumentCaptor;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.varmateo.aktoro.ActorRef;
 import com.varmateo.aktoro.ActorSystem;
 import com.varmateo.aktoro.ActorSystemImpl;
 
@@ -60,69 +66,20 @@ public final class ActorSystemImplTest {
      *
      */
     @Test
-    public void whenVoidMethodInvoked_thenItIsExecuted()
-            throws Exception {
+    public void whenCreateActor_thenFactoryIsInvoked() {
 
-        DummyActor actor = new DummyActor();
-        Dummy dummy = _actorSystem.createActor(
-                actorRef -> actor,
-                Dummy.class);
-        Semaphore semaphore = new Semaphore(1);
+        DummyActor actorCore = new DummyActor();
+        ActorCoreFactory<Dummy> coreFactory = mock(ActorCoreFactory.class);
 
         // WHEN
-        semaphore.acquire();
-        dummy.saveValue(
-                123,
-                () -> semaphore.release());
+        when(coreFactory.create(any())).thenReturn(actorCore);
+        Dummy actor = _actorSystem.createActor(coreFactory, Dummy.class);
 
         // THEN
-        boolean isMethodCompleted =
-                semaphore.tryAcquire(1_000, TimeUnit.MILLISECONDS);
-
-        assertThat(isMethodCompleted).isTrue();
-        assertThat(actor.getValue()).isEqualTo(123);
-    }
-
-
-    /**
-     *
-     */
-    @Test
-    public void whenNonVoidMethodInvoked_thenItIsExecutedSynchronously() {
-
-        DummyActor actor = new DummyActor();
-        Dummy dummy = _actorSystem.createActor(
-                actorRef -> actor,
-                Dummy.class);
-
-        // WHEN
-        String originalArgument = "Hello, world!";
-        String returnValue = dummy.identity(originalArgument);
-
-        // THEN
-        assertThat(returnValue).isEqualTo(originalArgument);
-    }
-
-
-    /**
-     *
-     */
-    @Test
-    public void whenNonVoidMethodThrowsUncheckedExceptionInCore_thenActorThrowsSameException() {
-
-        DummyActor actor = new DummyActor();
-        Dummy dummy = _actorSystem.createActor(
-                actorRef -> actor,
-                Dummy.class);
-
-        // WHEN
-        RuntimeException originalError =
-                new IllegalStateException("just testing");
-        Throwable actualError = catchThrowable(
-                () -> dummy.raiseUncheckedExceptionInNonVoidMethod(originalError));
-
-        // THEN
-        assertThat(actualError).isSameAs(originalError);
+        ArgumentCaptor<ActorRef> argument =
+                ArgumentCaptor.forClass(ActorRef.class);
+        verify(coreFactory).create(argument.capture());
+        assertThat(argument.getValue().self()).isSameAs(actor);
     }
 
 
@@ -138,6 +95,8 @@ public final class ActorSystemImplTest {
         String identity(String something);
 
         Throwable raiseUncheckedExceptionInNonVoidMethod(RuntimeException errror);
+
+        void raiseUncheckedExceptionInVoidMethod(RuntimeException errror);
     }
 
 
@@ -187,7 +146,19 @@ public final class ActorSystemImplTest {
          *
          */
         @Override
-        public Throwable raiseUncheckedExceptionInNonVoidMethod(final RuntimeException error) {
+        public Throwable raiseUncheckedExceptionInNonVoidMethod(
+                final RuntimeException error) {
+
+            throw error;
+        }
+
+
+        /**
+         *
+         */
+        @Override
+        public void raiseUncheckedExceptionInVoidMethod(
+                final RuntimeException error) {
 
             throw error;
         }

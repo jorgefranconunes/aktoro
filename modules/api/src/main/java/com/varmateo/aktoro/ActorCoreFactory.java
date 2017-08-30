@@ -24,16 +24,16 @@ public interface ActorCoreFactory<T> {
 
 
     /**
-     * Creates a new actor instance.
+     * Creates a new actor core instance.
      *
      * <p>The factory method will receive the <code>{@link
      * ActorRef}</code> with which the new actor instance will be
      * associated to.</p>
      *
      * @param actorSelf The actor reference that the returned actor
-     * instance will be associated to.
+     * core instance will be associated to.
      *
-     * @return A new actor instance.
+     * @return A new actor core instance.
      */
     T create(ActorRef<T> actorSelf);
 

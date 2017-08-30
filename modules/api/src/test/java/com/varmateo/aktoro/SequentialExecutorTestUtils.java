@@ -116,7 +116,7 @@ final class SequentialExecutorTestUtils {
         }
 
 
-        public void throwError(final long delay) {
+        public void raiseError(final long delay) {
 
             doSleep(delay);
             throw new RuntimeException("boom");
