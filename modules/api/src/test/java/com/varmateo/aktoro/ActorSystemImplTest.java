@@ -26,6 +26,8 @@ import static org.mockito.Mockito.when;
 import com.varmateo.aktoro.ActorRef;
 import com.varmateo.aktoro.ActorSystem;
 import com.varmateo.aktoro.ActorSystemImpl;
+import com.varmateo.aktoro.Dummy;
+import com.varmateo.aktoro.DummyCore;
 
 
 /**
@@ -68,11 +70,11 @@ public final class ActorSystemImplTest {
     @Test
     public void whenCreateActor_thenFactoryIsInvoked() {
 
-        DummyActor actorCore = new DummyActor();
         ActorCoreFactory<Dummy> coreFactory = mock(ActorCoreFactory.class);
 
         // WHEN
-        when(coreFactory.create(any())).thenReturn(actorCore);
+        when(coreFactory.create(any())).thenAnswer(
+                invocation -> new DummyCore((ActorRef)invocation.getArguments()[0]));
         Dummy actor = _actorSystem.createActor(coreFactory, Dummy.class);
 
         // THEN
@@ -80,90 +82,6 @@ public final class ActorSystemImplTest {
                 ArgumentCaptor.forClass(ActorRef.class);
         verify(coreFactory).create(argument.capture());
         assertThat(argument.getValue().self()).isSameAs(actor);
-    }
-
-
-    /**
-     *
-     */
-    private interface Dummy {
-
-        void saveValue(
-                int value,
-                Runnable completionCallback);
-
-        String identity(String something);
-
-        Throwable raiseUncheckedExceptionInNonVoidMethod(RuntimeException errror);
-
-        void raiseUncheckedExceptionInVoidMethod(RuntimeException errror);
-    }
-
-
-    /**
-     *
-     */
-    private static final class DummyActor
-            implements Dummy {
-
-
-        private int _value = 0;
-
-
-        /**
-         *
-         */
-        @Override
-        public void saveValue(
-                final int value,
-                final Runnable completionCallback) {
-
-            _value = value;
-            completionCallback.run();
-        }
-
-
-        /**
-         *
-         */
-        public int getValue() {
-
-            return _value;
-        }
-
-
-        /**
-         *
-         */
-        @Override
-        public String identity(final String something) {
-
-            return something;
-        }
-
-
-        /**
-         *
-         */
-        @Override
-        public Throwable raiseUncheckedExceptionInNonVoidMethod(
-                final RuntimeException error) {
-
-            throw error;
-        }
-
-
-        /**
-         *
-         */
-        @Override
-        public void raiseUncheckedExceptionInVoidMethod(
-                final RuntimeException error) {
-
-            throw error;
-        }
-
-
     }
 
 

@@ -20,6 +20,8 @@ import org.junit.Test;
 
 import com.varmateo.aktoro.ActorRef;
 import com.varmateo.aktoro.ActorRefImpl;
+import com.varmateo.aktoro.Dummy;
+import com.varmateo.aktoro.DummyCore;
 
 
 /**
@@ -35,7 +37,7 @@ public final class ActorRefImplTest {
             Executors.newFixedThreadPool(MAX_THREADS);
 
     private ActorRef<Dummy> _actorRef;
-    private DummyActor _actorCore;
+    private DummyCore _actorCore;
     private Dummy _actor;
 
 
@@ -45,9 +47,9 @@ public final class ActorRefImplTest {
     @Before
     public void setUp() {
 
-        DummyActor actorCore = new DummyActor();
         ActorRefImpl<Dummy> actorRefImpl =
                 new ActorRefImpl<>(Dummy.class, _executor);
+        DummyCore actorCore = new DummyCore(actorRefImpl);
 
         actorRefImpl.setActorCore(actorCore);
 
@@ -70,7 +72,7 @@ public final class ActorRefImplTest {
      *
      */
     @Test
-    public void whenVoidMethodInvoked_thenItIsExecuted()
+    public void whenVoidMethodInvoked_thenCoreMethodIsExecuted()
             throws InterruptedException {
 
         // WHEN
@@ -129,6 +131,22 @@ public final class ActorRefImplTest {
      *
      */
     @Test
+    public void whenNonVoidMethodInvokedTwiceDeep_thenReturnsOk() {
+
+        int value1 = _actor.saveValueAndReturnPrevious(
+                10,
+                () -> _actor.saveValueAndReturnPrevious(100, () -> {}));
+        int value2 = _actorCore.getValue();
+
+        assertThat(value1).isEqualTo(0);
+        assertThat(value2).isEqualTo(100);
+    }
+
+
+    /**
+     *
+     */
+    @Test
     public void whenNonVoidMethodThrowsUncheckedExceptionInCore_thenActorThrowsSameException() {
 
         // WHEN
@@ -140,90 +158,6 @@ public final class ActorRefImplTest {
 
         // THEN
         assertThat(actualError).isSameAs(originalError);
-    }
-
-
-    /**
-     *
-     */
-    private interface Dummy {
-
-        void saveValue(
-                int value,
-                Runnable completionCallback);
-
-        String identity(String something);
-
-        Throwable raiseUncheckedExceptionInNonVoidMethod(RuntimeException errror);
-
-        void raiseUncheckedExceptionInVoidMethod(RuntimeException errror);
-    }
-
-
-    /**
-     *
-     */
-    private static final class DummyActor
-            implements Dummy {
-
-
-        private int _value = 0;
-
-
-        /**
-         *
-         */
-        @Override
-        public void saveValue(
-                final int value,
-                final Runnable completionCallback) {
-
-            _value = value;
-            completionCallback.run();
-        }
-
-
-        /**
-         *
-         */
-        public int getValue() {
-
-            return _value;
-        }
-
-
-        /**
-         *
-         */
-        @Override
-        public String identity(final String something) {
-
-            return something;
-        }
-
-
-        /**
-         *
-         */
-        @Override
-        public Throwable raiseUncheckedExceptionInNonVoidMethod(
-                final RuntimeException error) {
-
-            throw error;
-        }
-
-
-        /**
-         *
-         */
-        @Override
-        public void raiseUncheckedExceptionInVoidMethod(
-                final RuntimeException error) {
-
-            throw error;
-        }
-
-
     }
 
 
