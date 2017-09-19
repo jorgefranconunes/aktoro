@@ -28,6 +28,13 @@ import com.varmateo.aktoro.SequentialExecutor;
         implements ActorRef<T> {
 
 
+    private static final ThreadLocal<Integer> _callDepth = new ThreadLocal<Integer>() {
+            @Override
+            protected Integer initialValue() {
+                return 0;
+            }
+        };
+
     private final Executor _sequentialExecutor;
     private final ProxyActorInvocationHandler _proxyInvocationHandler;
     private final T _actorSelf;
@@ -168,16 +175,22 @@ import com.varmateo.aktoro.SequentialExecutor;
                 final Object[] args) {
 
             try {
-                method.invoke(actorCore, args);
-            } catch ( IllegalAccessException e ) {
-                throw new RuntimeException(e);
-            } catch ( InvocationTargetException e ) {
-                Throwable cause = e.getCause();
-                if ( cause instanceof RuntimeException ) {
-                    throw (RuntimeException)cause;
-                } else {
-                    throw new RuntimeException(cause);
+                _callDepth.set(_callDepth.get()+1);
+
+                try {
+                    method.invoke(actorCore, args);
+                } catch ( IllegalAccessException e ) {
+                    throw new RuntimeException(e);
+                } catch ( InvocationTargetException e ) {
+                    Throwable cause = e.getCause();
+                    if ( cause instanceof RuntimeException ) {
+                        throw (RuntimeException)cause;
+                    } else {
+                        throw new RuntimeException(cause);
+                    }
                 }
+            } finally {
+                _callDepth.set(_callDepth.get()-1);
             }
         }
 
@@ -194,7 +207,11 @@ import com.varmateo.aktoro.SequentialExecutor;
             Runnable task = () -> doInvokeNonVoidMethod(
                     _actorCore, method, args, future);
 
-            _executor.execute(task);
+            if ( _callDepth.get() > 0 ) {
+                task.run();
+            } else {
+                _executor.execute(task);
+            }
 
             final Object result;
 
@@ -219,12 +236,18 @@ import com.varmateo.aktoro.SequentialExecutor;
                 final CompletableFuture<Object> future) {
 
             try {
-                Object result = method.invoke(actorCore, args);
-                future.complete(result);
-            } catch ( IllegalAccessException e ) {
-                future.completeExceptionally(new RuntimeException(e));
-            } catch ( InvocationTargetException e ) {
-                future.completeExceptionally(e.getCause());
+                _callDepth.set(_callDepth.get()+1);
+
+                try {
+                    Object result = method.invoke(actorCore, args);
+                    future.complete(result);
+                } catch ( IllegalAccessException e ) {
+                    future.completeExceptionally(new RuntimeException(e));
+                } catch ( InvocationTargetException e ) {
+                    future.completeExceptionally(e.getCause());
+                }
+            } finally {
+                _callDepth.set(_callDepth.get()-1);
             }
         }
 
