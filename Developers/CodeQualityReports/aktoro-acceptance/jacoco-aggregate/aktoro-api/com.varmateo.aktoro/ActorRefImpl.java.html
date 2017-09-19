@@ -28,6 +28,13 @@ import com.varmateo.aktoro.SequentialExecutor;
         implements ActorRef&lt;T&gt; {
 
 
+<span class="fc" id="L31">    private static final ThreadLocal&lt;Integer&gt; _callDepth = new ThreadLocal&lt;Integer&gt;() {</span>
+            @Override
+            protected Integer initialValue() {
+<span class="fc" id="L34">                return 0;</span>
+            }
+        };
+
     private final Executor _sequentialExecutor;
     private final ProxyActorInvocationHandler _proxyInvocationHandler;
     private final T _actorSelf;
@@ -44,23 +51,23 @@ import com.varmateo.aktoro.SequentialExecutor;
      */
     /* default */ ActorRefImpl(
             final Class&lt;T&gt; actorType,
-<span class="fc" id="L47">            final Executor executor) {</span>
+<span class="fc" id="L54">            final Executor executor) {</span>
 
-<span class="fc" id="L49">        Executor sequentialExecutor = new SequentialExecutor(executor);</span>
-<span class="fc" id="L50">        ProxyActorInvocationHandler proxyInvocationHandler =</span>
+<span class="fc" id="L56">        Executor sequentialExecutor = new SequentialExecutor(executor);</span>
+<span class="fc" id="L57">        ProxyActorInvocationHandler proxyInvocationHandler =</span>
                 new ProxyActorInvocationHandler(sequentialExecutor);
 
         @SuppressWarnings(&quot;unchecked&quot;)
-<span class="fc" id="L54">        T actorSelf =</span>
-<span class="fc" id="L55">                (T)Proxy.newProxyInstance(</span>
-<span class="fc" id="L56">                        actorType.getClassLoader(),</span>
+<span class="fc" id="L61">        T actorSelf =</span>
+<span class="fc" id="L62">                (T)Proxy.newProxyInstance(</span>
+<span class="fc" id="L63">                        actorType.getClassLoader(),</span>
                         new Class&lt;?&gt;[] { actorType },
                         proxyInvocationHandler);
 
-<span class="fc" id="L60">        _sequentialExecutor = sequentialExecutor;</span>
-<span class="fc" id="L61">        _proxyInvocationHandler = proxyInvocationHandler;</span>
-<span class="fc" id="L62">        _actorSelf = actorSelf;</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L67">        _sequentialExecutor = sequentialExecutor;</span>
+<span class="fc" id="L68">        _proxyInvocationHandler = proxyInvocationHandler;</span>
+<span class="fc" id="L69">        _actorSelf = actorSelf;</span>
+<span class="fc" id="L70">    }</span>
 
 
     /**
@@ -73,8 +80,8 @@ import com.varmateo.aktoro.SequentialExecutor;
      */
     /* default */ void setActorCore(final T actorCore) {
 
-<span class="fc" id="L76">        _proxyInvocationHandler.setActorCore(actorCore);</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L83">        _proxyInvocationHandler.setActorCore(actorCore);</span>
+<span class="fc" id="L84">    }</span>
 
 
     /**
@@ -83,8 +90,8 @@ import com.varmateo.aktoro.SequentialExecutor;
     @Override
     public void perform(final Runnable action) {
 
-<span class="nc" id="L86">        _sequentialExecutor.execute(action);</span>
-<span class="nc" id="L87">    }</span>
+<span class="nc" id="L93">        _sequentialExecutor.execute(action);</span>
+<span class="nc" id="L94">    }</span>
 
 
     /**
@@ -93,7 +100,7 @@ import com.varmateo.aktoro.SequentialExecutor;
     @Override
     public T self() {
 
-<span class="fc" id="L96">        return _actorSelf;</span>
+<span class="fc" id="L103">        return _actorSelf;</span>
     }
 
 
@@ -111,10 +118,10 @@ import com.varmateo.aktoro.SequentialExecutor;
         /**
          *
          */
-<span class="fc" id="L114">        /* default */ ProxyActorInvocationHandler(final Executor executor) {</span>
+<span class="fc" id="L121">        /* default */ ProxyActorInvocationHandler(final Executor executor) {</span>
 
-<span class="fc" id="L116">            _executor = executor;</span>
-<span class="fc" id="L117">        }</span>
+<span class="fc" id="L123">            _executor = executor;</span>
+<span class="fc" id="L124">        }</span>
 
 
         /**
@@ -122,8 +129,8 @@ import com.varmateo.aktoro.SequentialExecutor;
          */
         public void setActorCore(final Object actorCore) {
 
-<span class="fc" id="L125">            _actorCore = actorCore;</span>
-<span class="fc" id="L126">        }</span>
+<span class="fc" id="L132">            _actorCore = actorCore;</span>
+<span class="fc" id="L133">        }</span>
 
 
         /**
@@ -136,10 +143,10 @@ import com.varmateo.aktoro.SequentialExecutor;
                 final Object[] args)
                 throws Throwable {
 
-<span class="fc bfc" id="L139" title="All 2 branches covered.">            if ( method.getReturnType() == Void.TYPE ) {</span>
-<span class="fc" id="L140">                return invokeVoidMethod(method, args);</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">            if ( method.getReturnType() == Void.TYPE ) {</span>
+<span class="fc" id="L147">                return invokeVoidMethod(method, args);</span>
             } else {
-<span class="fc" id="L142">                return invokeNonVoidMethod(method, args);</span>
+<span class="fc" id="L149">                return invokeNonVoidMethod(method, args);</span>
             }
         }
 
@@ -151,11 +158,11 @@ import com.varmateo.aktoro.SequentialExecutor;
                 final Method method,
                 final Object[] args) {
 
-<span class="fc" id="L154">            Runnable task = () -&gt; doInvokeVoidMethod(_actorCore, method, args);</span>
+<span class="fc" id="L161">            Runnable task = () -&gt; doInvokeVoidMethod(_actorCore, method, args);</span>
 
-<span class="fc" id="L156">            _executor.execute(task);</span>
+<span class="fc" id="L163">            _executor.execute(task);</span>
 
-<span class="fc" id="L158">            return null;</span>
+<span class="fc" id="L165">            return null;</span>
         }
 
 
@@ -168,18 +175,24 @@ import com.varmateo.aktoro.SequentialExecutor;
                 final Object[] args) {
 
             try {
-<span class="fc" id="L171">                method.invoke(actorCore, args);</span>
-<span class="nc" id="L172">            } catch ( IllegalAccessException e ) {</span>
-<span class="nc" id="L173">                throw new RuntimeException(e);</span>
-<span class="fc" id="L174">            } catch ( InvocationTargetException e ) {</span>
-<span class="fc" id="L175">                Throwable cause = e.getCause();</span>
-<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                if ( cause instanceof RuntimeException ) {</span>
-<span class="fc" id="L177">                    throw (RuntimeException)cause;</span>
-                } else {
-<span class="nc" id="L179">                    throw new RuntimeException(cause);</span>
-                }
-<span class="fc" id="L181">            }</span>
-<span class="fc" id="L182">        }</span>
+<span class="fc" id="L178">                _callDepth.set(_callDepth.get()+1);</span>
+
+                try {
+<span class="fc" id="L181">                    method.invoke(actorCore, args);</span>
+<span class="nc" id="L182">                } catch ( IllegalAccessException e ) {</span>
+<span class="nc" id="L183">                    throw new RuntimeException(e);</span>
+<span class="fc" id="L184">                } catch ( InvocationTargetException e ) {</span>
+<span class="fc" id="L185">                    Throwable cause = e.getCause();</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">                    if ( cause instanceof RuntimeException ) {</span>
+<span class="fc" id="L187">                        throw (RuntimeException)cause;</span>
+                    } else {
+<span class="nc" id="L189">                        throw new RuntimeException(cause);</span>
+                    }
+<span class="fc" id="L191">                }</span>
+            } finally {
+<span class="fc" id="L193">                _callDepth.set(_callDepth.get()-1);</span>
+<span class="fc" id="L194">            }</span>
+<span class="fc" id="L195">        }</span>
 
 
         /**
@@ -190,22 +203,26 @@ import com.varmateo.aktoro.SequentialExecutor;
                 final Object[] args)
                 throws Throwable {
 
-<span class="fc" id="L193">            CompletableFuture&lt;Object&gt; future = new CompletableFuture&lt;&gt;();</span>
-<span class="fc" id="L194">            Runnable task = () -&gt; doInvokeNonVoidMethod(</span>
+<span class="fc" id="L206">            CompletableFuture&lt;Object&gt; future = new CompletableFuture&lt;&gt;();</span>
+<span class="fc" id="L207">            Runnable task = () -&gt; doInvokeNonVoidMethod(</span>
                     _actorCore, method, args, future);
 
-<span class="fc" id="L197">            _executor.execute(task);</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">            if ( _callDepth.get() &gt; 0 ) {</span>
+<span class="fc" id="L211">                task.run();</span>
+            } else {
+<span class="fc" id="L213">                _executor.execute(task);</span>
+            }
 
             final Object result;
 
             try {
-<span class="fc" id="L202">                result = future.join();</span>
-<span class="fc" id="L203">            } catch ( CompletionException e ) {</span>
-<span class="fc" id="L204">                Throwable cause = e.getCause();</span>
-<span class="fc" id="L205">                throw cause;</span>
-<span class="fc" id="L206">            }</span>
+<span class="fc" id="L219">                result = future.join();</span>
+<span class="fc" id="L220">            } catch ( CompletionException e ) {</span>
+<span class="fc" id="L221">                Throwable cause = e.getCause();</span>
+<span class="fc" id="L222">                throw cause;</span>
+<span class="fc" id="L223">            }</span>
 
-<span class="fc" id="L208">            return result;</span>
+<span class="fc" id="L225">            return result;</span>
         }
 
 
@@ -219,14 +236,20 @@ import com.varmateo.aktoro.SequentialExecutor;
                 final CompletableFuture&lt;Object&gt; future) {
 
             try {
-<span class="fc" id="L222">                Object result = method.invoke(actorCore, args);</span>
-<span class="fc" id="L223">                future.complete(result);</span>
-<span class="nc" id="L224">            } catch ( IllegalAccessException e ) {</span>
-<span class="nc" id="L225">                future.completeExceptionally(new RuntimeException(e));</span>
-<span class="fc" id="L226">            } catch ( InvocationTargetException e ) {</span>
-<span class="fc" id="L227">                future.completeExceptionally(e.getCause());</span>
-<span class="pc" id="L228">            }</span>
-<span class="fc" id="L229">        }</span>
+<span class="fc" id="L239">                _callDepth.set(_callDepth.get()+1);</span>
+
+                try {
+<span class="fc" id="L242">                    Object result = method.invoke(actorCore, args);</span>
+<span class="fc" id="L243">                    future.complete(result);</span>
+<span class="nc" id="L244">                } catch ( IllegalAccessException e ) {</span>
+<span class="nc" id="L245">                    future.completeExceptionally(new RuntimeException(e));</span>
+<span class="fc" id="L246">                } catch ( InvocationTargetException e ) {</span>
+<span class="fc" id="L247">                    future.completeExceptionally(e.getCause());</span>
+<span class="pc" id="L248">                }</span>
+            } finally {
+<span class="pc" id="L250">                _callDepth.set(_callDepth.get()-1);</span>
+<span class="fc" id="L251">            }</span>
+<span class="fc" id="L252">        }</span>
 
 
     }

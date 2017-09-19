@@ -1,6 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Aktoro API,com.varmateo.aktoro,SequentialExecutor,0,72,0,6,0,19,0,7,0,4
 Aktoro API,com.varmateo.aktoro,DefaultActorSystem,3,5,0,0,2,1,1,1,1,1
-Aktoro API,com.varmateo.aktoro,ActorRefImpl,5,41,0,0,2,13,1,3,1,3
+Aktoro API,com.varmateo.aktoro,ActorRefImpl,5,46,0,0,2,14,1,4,1,4
 Aktoro API,com.varmateo.aktoro,ActorSystemImpl,0,23,0,0,0,7,0,2,0,2
-Aktoro API,com.varmateo.aktoro,ActorRefImpl.ProxyActorInvocationHandler,20,108,1,3,5,33,1,10,0,9
+Aktoro API,com.varmateo.aktoro,ActorRefImpl.new ThreadLocal() {...},0,6,0,0,0,2,0,2,0,2
+Aktoro API,com.varmateo.aktoro,ActorRefImpl.ProxyActorInvocationHandler,32,166,1,5,5,41,1,11,0,9
