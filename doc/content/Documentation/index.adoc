@@ -1,0 +1,28 @@
+= Aktoro Documentation
+
+Here you can find information on using the Aktoro library in your
+projects.
+
+
+
+
+
+== Maven coordinates
+
+[source,xml,subs=attributes+]
+----
+<dependency>
+  <groupId>com.varmateo.aktoro</groupId>
+  <artifactId>yawg-api</artifactId>
+  <version>{latestAktoroVersion}</version>
+</dependency>
+----
+
+
+
+
+
+== API reference
+
+http://javadoc.io/doc/com.varmateo.aktoro/aktoro-api/{latestAktoroVersion}[Javadocs]
+for the latest release ({latestAktoroVersion})

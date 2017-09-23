@@ -14,6 +14,10 @@
                url="index.html"
                title="Home" />
             <@navbarItem
+               name="documentation"
+               url="Documentation/index.html"
+               title="Documentation" />
+            <@navbarItem
                name="developers"
                url="Developers/index.html"
                title="Developers" />

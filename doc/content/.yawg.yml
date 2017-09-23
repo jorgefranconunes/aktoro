@@ -35,6 +35,7 @@ exclude:
 
 
 pageVars:
+  latestAktoroVersion: 0.0.1
   navbarSelectedItem: "home"
 
 
