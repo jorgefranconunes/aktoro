@@ -1,4 +1,0 @@
-= Aktoro Project
-
-Aktoro is an actor library for Java.
-

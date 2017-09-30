@@ -5,7 +5,7 @@ image:https://api.codacy.com/project/badge/Grade/7b9faf6bcd2a4537baf2a8ca418cad5
 
 == Aktoro Project
 
-Aktoro is an actor library for Java.
+Aktoro is an actor system library for Java.
 
 Go to the http://aktoro.varmateo.com/[Aktoro site] for additional
 documentation.

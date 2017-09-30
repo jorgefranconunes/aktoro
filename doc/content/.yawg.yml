@@ -11,7 +11,7 @@ template: "aktoro-site.ftlh"
 # The home page uses a dedicated template.
 #
 templatesHere:
-  "yawg-site-notitle.ftlh":
+  "aktoro-site-notitle.ftlh":
     - "index.html"
 
 #

@@ -16,7 +16,7 @@
 
     <div class="akt-body">
 
-      <#include "akt-navbar.ftlh">
+      <#include "aktoro-navbar.ftlh">
 
       <div class="container akt-content">
 

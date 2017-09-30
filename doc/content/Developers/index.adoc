@@ -3,6 +3,16 @@
 Here you will find information intended for the developers of the Aktoro
 project.
 
+If you are interested in using the Aktoro library in your project,
+please see the link:../Documentation/index.html[end user
+documentation].
+
+
+
+
+
+== Source code
+
 
 * Project GitHub page: https://github.com/jorgefranconunes/aktoro
 
