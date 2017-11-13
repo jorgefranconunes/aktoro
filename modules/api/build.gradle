@@ -1,0 +1,11 @@
+apply plugin : 'java'
+
+jar {
+    baseName 'aktoro-api'
+}
+
+dependencies {
+    testCompile "org.assertj:assertj-core:$assertjCoreVersion"
+    testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
+    testCompile "junit:junit:$junitVersion"
+}

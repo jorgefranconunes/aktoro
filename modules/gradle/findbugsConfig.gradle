@@ -1,0 +1,21 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017 Aktoro project contributors.
+ *
+ **************************************************************************/
+
+/**
+ * Findbugs configuration
+ */
+apply plugin : 'findbugs'
+
+findbugs {
+    ignoreFailures = true
+}
+
+findbugsTest.enabled = false
+
+tasks.withType(FindBugs) {
+    reports.html.enabled = true
+    reports.xml.enabled = false
+}

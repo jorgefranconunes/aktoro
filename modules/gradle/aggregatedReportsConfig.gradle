@@ -1,0 +1,13 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017 Aktoro project contributors.
+ *
+ **************************************************************************/
+
+apply plugin : 'build-dashboard'
+
+
+task aggregatedTestReport(type: TestReport) {
+    destinationDir = file("${buildDir}/reports/allTests")
+    reportOn subprojects*.test
+}

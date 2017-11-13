@@ -1,0 +1,41 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017 Aktoro project contributors.
+ *
+ **************************************************************************/
+
+ext.aktoroVersion =  "0.0.1-SNAPSHOT"
+
+/**
+ * Versions of dependencies to be used by all sub-projects.
+ */
+ext.assertjCoreVersion = "3.6.1"
+ext.junitVersion = "4.11"
+ext.mockitoCoreVersion = "2.2.27"
+
+description = "Aktoro"
+
+
+/**
+ * Configuration common to all sub-projects
+ */
+subprojects {
+    apply plugin : 'java'
+
+    version = aktoroVersion
+
+    repositories {
+        mavenCentral()
+    }
+
+    project.sourceCompatibility = "1.8"
+
+    apply from: "${rootDir}/gradle/checkstyleConfig.gradle"
+    apply from: "${rootDir}/gradle/findbugsConfig.gradle"
+    apply from: "${rootDir}/gradle/javadocConfig.gradle"
+    apply from: "${rootDir}/gradle/pmdConfig.gradle"
+    apply from: "${rootDir}/gradle/testConfig.gradle"
+}
+
+
+apply from: "${rootDir}/gradle/aggregatedReportsConfig.gradle"

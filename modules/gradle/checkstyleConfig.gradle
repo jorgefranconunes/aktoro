@@ -1,0 +1,19 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017 Aktoro project contributors.
+ *
+ **************************************************************************/
+
+/**
+ * Checkstyle configuration
+ */
+apply plugin : 'checkstyle'
+
+checkstyle {
+    configDir = file("${rootDir}/src/main/config/checkstyle")
+    ignoreFailures = true
+    showViolations = false
+    toolVersion "7.1.2"
+}
+
+checkstyleTest.enabled = false

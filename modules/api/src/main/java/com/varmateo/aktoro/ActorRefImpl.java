@@ -28,12 +28,13 @@ import com.varmateo.aktoro.SequentialExecutor;
         implements ActorRef<T> {
 
 
-    private static final ThreadLocal<Integer> _callDepth = new ThreadLocal<Integer>() {
-            @Override
-            protected Integer initialValue() {
-                return 0;
-            }
-        };
+    private static final ThreadLocal<Integer> _callDepth =
+            new ThreadLocal<Integer>() {
+                @Override
+                protected Integer initialValue() {
+                    return 0;
+                }
+            };
 
     private final Executor _sequentialExecutor;
     private final ProxyActorInvocationHandler _proxyInvocationHandler;

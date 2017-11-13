@@ -6,6 +6,8 @@
 *.~??
 *.aux
 *.bak
+build
+.gradle
 *.log
 *.out
 *.pid
