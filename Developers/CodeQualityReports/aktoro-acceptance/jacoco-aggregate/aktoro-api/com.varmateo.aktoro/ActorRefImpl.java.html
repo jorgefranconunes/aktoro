@@ -6,13 +6,13 @@
 
 package com.varmateo.aktoro;
 
-import java.util.concurrent.Executor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.Executor;
 
 import com.varmateo.aktoro.ActorRef;
 import com.varmateo.aktoro.SequentialExecutor;
