@@ -13,7 +13,7 @@ projects.
 ----
 <dependency>
   <groupId>com.varmateo.aktoro</groupId>
-  <artifactId>yawg-api</artifactId>
+  <artifactId>aktoro-api</artifactId>
   <version>{latestAktoroVersion}</version>
 </dependency>
 ----
