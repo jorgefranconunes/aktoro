@@ -31,7 +31,7 @@ subprojects {
     project.sourceCompatibility = "1.8"
 
     apply from: "${rootDir}/gradle/checkstyleConfig.gradle"
-    //apply from: "${rootDir}/gradle/findbugsConfig.gradle"
+    apply from: "${rootDir}/gradle/findbugsConfig.gradle"
     //apply from: "${rootDir}/gradle/javadocConfig.gradle"
     //apply from: "${rootDir}/gradle/pmdConfig.gradle"
     apply from: "${rootDir}/gradle/testConfig.gradle"
