@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+
+
+  <head>
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-79615115-2">
+</script>
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-79615115-2');
+</script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Setting up the development environment</title>
+
+    <link
+       rel="stylesheet"
+       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+       crossorigin="anonymous" />
+
+    <link
+       rel="stylesheet"
+       href="../aktoro-site.css?v=4ea8fe0e-803a-4e99-aede-734d2b322101" />
+
+  </head>
+
+  <body>
+
+    <div class="akt-body">
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="../index.html">Aktoro</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../Documentation/index.html">Documentation</a></li>
+    <li class="active"><a href="../Developers/index.html">Developers</a></li>
+            <li><a href="https://github.com/jorgefranconunes/aktoro/">GitHub repository</a></li>
+
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+
+      <div class="container akt-content">
+
+
+  <!#-- The breadcrumb bar is only visible if there is more than
+        one bread crumb on this page.-->
+
+    <ol class="breadcrumb">
+          <li><a href=".././index.html">Home</a></li>
+          <li><a href="../Developers/index.html">Developers</a></li>
+    </ol>
+
+        <h1>Setting up the development environment</h1>
+        <div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_requirements">2. Requirements</a></li>
+<li><a href="#_fetch_source_tree">3. Fetch source tree</a></li>
+<li><a href="#_edit_compile_run_cycle">4. Edit/compile/run cycle</a></li>
+<li><a href="#_running_unit_tests">5. Running unit tests</a></li>
+<li><a href="#_running_integration_tests">6. Running integration tests</a></li>
+<li><a href="#_code_quality_reports">7. Code quality reports</a></li>
+<li><a href="#_creating_a_new_release">8. Creating a new release</a></li>
+</ul>
+</div>
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This document describes the steps for seting up the development
+environment for the Aktoro project. The information contained here is
+targeted at developers of the Aktoro project itself.</p>
+</div>
+<div class="paragraph">
+<p>The instructions in this document assume a Linux environment, or
+Windows with Cygwin installed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements">2. Requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The following packages are required for developing in the Aktoro
+project:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Oracle
+JDK 8</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You will need to have the above packages installed in your
+workstation.</p>
+</div>
+<div class="paragraph">
+<p>In addition to the above, some other tools are also required. Those
+tools are available from specific platform packages. Depending on
+platform, you will need to install the packages mentioned on the table
+below.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Platform</th>
+<th class="tableblock halign-left valign-top">Packages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CentOS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gnupg2</code>
+</p><p class="tableblock">  <code>libxslt</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ubuntu</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>gnupg</code>
+</p><p class="tableblock">  <code>xsltproc</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cygwin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>libxslt</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_fetch_source_tree">3. Fetch source tree</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To fetch the project source tree do the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">git clone git@github.com:jorgefranconunes/aktoro.git</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After executing the above (and after a few moments) a directory named
+<code>aktoro</code> will have been created in your current working
+directory. That <code>aktoro</code> directory contains the project tree, and will
+be your working area.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_edit_compile_run_cycle">4. Edit/compile/run cycle</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To perform a full build, just run the Gradle wrapper in the <code>modules</code>
+directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew build</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>By default integration tests are no run. When you want to run the
+integration tests with the build do the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew -P aktoro.integrationTest build</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_unit_tests">5. Running unit tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To run all unit tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To force the unit tests to be run again:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew cleanTest test</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To run a single unit test suite execute the following from the command
+line:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew cleanTest test --tests \*.ActorRefImplTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Of course, you can change the <code>ActorRefImplTest</code> above with the test
+suite you actually want to run.  By convention classes containing
+integration tests test suites have names ending in <code>Test</code>.</p>
+</div>
+<div class="paragraph">
+<p>And to run one single unit test:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew cleanTest test \
+    --tests \*.ActorRefImplTest.whenVoidMethodInvoked_thenCoreMethodIsExecuted</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_running_integration_tests">6. Running integration tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To run all integration tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew integrationTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To force the integration tests to be run again:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew cleanIntegrationTest integrationTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Running just one single integration test suite, or one single
+integraton test is the exact same procedure as for unit tests. By
+convention classes containing integration tests test suites have names
+ending in <code>IT</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_code_quality_reports">7. Code quality reports</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>THE INFORMATION IN THIS SECTION IS NOT YET VALID.</strong></p>
+</div>
+<div class="paragraph">
+<p>To generate static analysis and test code coverage reports do the
+following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./devtools/bin/build-bundle --with-reports</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will create under directory <code>./target/CodeQualityReports</code> a set
+of HTML pages with the results of static analysis (Checkstyle,
+Findbugs, PMD) and test code coverage (Jacoco). The entry page will be
+at <code>./target/CodeQualityReports/index.html</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creating_a_new_release">8. Creating a new release</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>THE INFORMATION IN THIS SECTION IS NOT YET VALID.</strong></p>
+</div>
+<div class="paragraph">
+<p>To generate the tarball for an engineering build do the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>./devtools/bin/build-create-bundle</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above will perform a full build and create a tarball named
+<code>aktoro-0.0.1-yyyyMMddhhmm.tar.bz2</code> at the top of the
+working area.</p>
+</div>
+<div class="paragraph">
+<p>To generate an official release see the instructions at
+<a href="CreatingRelease.html">Creating a release of the Yawg software</a>.</p>
+</div>
+</div>
+</div>
+
+
+<footer class="akt-footer">
+  <p>&copy;2017 Jorge Nunes</p>
+  <p>
+    Mixed with
+    <a href="http://getbootstrap.com/" target="_blank">Bootstrap 3.3.6</a>
+    |
+    Baked with
+    <a href="http://yawg.varmateo.com/">Yawg 0.9.8</a>
+    |
+    Last update 2017-12-30 12:18 UTC
+  </p>
+</footer>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>
