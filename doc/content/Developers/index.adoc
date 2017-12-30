@@ -11,12 +11,12 @@ documentation].
 
 
 
-== Source code
+== Instructions
 
+link:DevelopmentEnvironmentSetup.html[Setting up the development
+environment]
 
-* Project GitHub page: https://github.com/jorgefranconunes/aktoro
-
-* Git repo: `git@github.com:jorgefranconunes/aktoro.git`
+Creating a release of the Aktoro software -- Soon...
 
 
 

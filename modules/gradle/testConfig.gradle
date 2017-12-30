@@ -2,38 +2,92 @@
  *
  * Copyright (c) 2017 Aktoro project contributors.
  *
- **************************************************************************/
-
-/**
  * Unit tests configuration.
  *
  * Example of running one single test from the command line:
  *
  *    gw test --tests \*.ActorRefImplTest
+ *
+ **************************************************************************/
+
+
+/**
+ * @param testClassPattern Glob pattern of class file names containing
+ * test suites.
  */
-test {
-    include "**/*Test.class"
+def buildTestTaskCommonConfiguration(final String testClassPattern) {
 
-    testLogging {
-        events "standard_out", "standard_error"
-        exceptionFormat "full"
-        showExceptions true
-        showCauses true
-        showStackTraces true
+    return {
+        include testClassPattern
+
+        testLogging {
+            events "standard_out", "standard_error"
+            exceptionFormat "full"
+            showExceptions true
+            showCauses true
+            showStackTraces true
+        }
+
+        afterSuite this.&printTestResult
+
+        // We do not generate the HTML report for each sub-project
+        // because the aggregatedTestReport will also generate HTML.
+        reports.html.enabled = false
     }
+}
 
-    afterSuite { descriptor, result ->
-        if ( (descriptor.parent!=null) && (descriptor.className!=null) ) {
-            def duration = result.endTime - result.startTime
-            def total = result.testCount
-            def successes = result.successfulTestCount
-            def failures = result.failedTestCount
-            def skiped = result.skippedTestCount
+
+/**
+ * Utility function for displaying test results.
+ */
+def printTestResult(descriptor , result) {
+
+    if ( (descriptor.parent!=null) && (descriptor.className!=null) ) {
+        def duration = result.endTime - result.startTime
+        def total = result.testCount
+        def successes = result.successfulTestCount
+        def failures = result.failedTestCount
+        def skiped = result.skippedTestCount
+
+        if ( total > 0 ) {
             println "${result.resultType} ${failures}/${successes}/${total} ${duration} ms : ${descriptor.name}"
+        } else {
+            // No tests were executed in this test suite, so we say
+            // nothing.
         }
     }
-
-    // We do not generate the HTML report for each sub-project because
-    // the aggregatedTestReport will also generate HTML.
-    reports.html.enabled = false
 }
+
+
+/**
+ * Configuration for "test" task.
+ */
+test buildTestTaskCommonConfiguration("**/*Test.class")
+
+
+/**
+ * Configuration for "integrationTest" task.
+ *
+ * This task is only enabled when project property
+ * "${rootProject.name}.integrationTests" is defined and is different
+ * from "no".
+ */
+task integrationTest(type: Test) {
+    description "Runs the integration tests."
+}
+
+integrationTest buildTestTaskCommonConfiguration("**/*IT.class")
+
+integrationTest.onlyIf {
+    def propName = rootProject.name + ".integrationTest"
+    def isExecutionDesired =
+            project.hasProperty(propName) && (project[propName] != "no")
+    def isTargetTask =
+            gradle.startParameter.taskNames.contains("integrationTest")
+     def isExecutionEnabled = isExecutionDesired || isTargetTask
+
+    isExecutionEnabled
+}
+
+integrationTest.mustRunAfter test
+check.dependsOn integrationTest

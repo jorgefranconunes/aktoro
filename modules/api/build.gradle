@@ -5,7 +5,7 @@ jar {
 }
 
 dependencies {
+    testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjCoreVersion"
     testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
-    testCompile "junit:junit:$junitVersion"
 }
