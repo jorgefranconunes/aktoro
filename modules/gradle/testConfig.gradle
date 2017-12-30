@@ -10,6 +10,8 @@
  *
  **************************************************************************/
 
+import static com.varmateo.gradle.Utils.enableTaskOnlyIfSelected
+
 
 /**
  * @param testClassPattern Glob pattern of class file names containing
@@ -78,16 +80,7 @@ task integrationTest(type: Test) {
 
 integrationTest buildTestTaskCommonConfiguration("**/*IT.class")
 
-integrationTest.onlyIf {
-    def propName = rootProject.name + ".integrationTest"
-    def isExecutionDesired =
-            project.hasProperty(propName) && (project[propName] != "no")
-    def isTargetTask =
-            gradle.startParameter.taskNames.contains("integrationTest")
-     def isExecutionEnabled = isExecutionDesired || isTargetTask
-
-    isExecutionEnabled
-}
+enableTaskOnlyIfSelected integrationTest
 
 integrationTest.mustRunAfter test
 check.dependsOn integrationTest

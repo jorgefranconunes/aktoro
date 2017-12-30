@@ -2,12 +2,14 @@
  *
  * Copyright (c) 2017 Aktoro project contributors.
  *
+ * Checkstyle configuration
+ *
  **************************************************************************/
 
-/**
- * Checkstyle configuration
- */
-apply plugin : 'checkstyle'
+import static com.varmateo.gradle.Utils.enableTaskOnlyIfSelected
+
+
+apply plugin: 'checkstyle'
 
 checkstyle {
     configDir = file("${rootDir}/src/main/config/checkstyle")
@@ -15,5 +17,7 @@ checkstyle {
     showViolations = false
     toolVersion "7.1.2"
 }
+
+enableTaskOnlyIfSelected checkstyleMain
 
 checkstyleTest.enabled = false
