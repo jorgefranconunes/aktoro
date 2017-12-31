@@ -6,6 +6,7 @@
 
 package com.varmateo.gradle;
 
+import org.gradle.api.Project
 import org.gradle.api.Task
 
 
@@ -42,6 +43,30 @@ final class Utils {
         closure.delegate = task.project
 
         task.onlyIf closure
+    }
+
+
+    /**
+     * Executes the given closure if a task with the given name is
+     * currently selected to be executed.
+     */
+    static void onlyIfTaskSelected(
+            final String taskName,
+            final Closure closure) {
+
+        def context = closure.delegate
+        Project project = context.project
+        String propName = project.rootProject.name + "." + taskName
+        boolean isExecutionDesired =
+                project.hasProperty(propName) && (project.getProperty(propName) != "no")
+        boolean isTargetTask =
+                project.gradle.startParameter.taskNames.contains(taskName)
+       boolean isExecutionEnabled =
+               isExecutionDesired || isTargetTask
+
+       if ( isExecutionEnabled ) {
+           closure.call()
+       }
     }
 
 }

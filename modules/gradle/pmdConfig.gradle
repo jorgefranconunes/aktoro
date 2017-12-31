@@ -4,6 +4,11 @@
  *
  * PMD configuration
  *
+ *
+ * Example for generating a PMD report:
+ *
+ * gradlew -P aktoro.pmdMain build
+ *
  **************************************************************************/
 
 import static com.varmateo.gradle.Utils.enableTaskOnlyIfSelected

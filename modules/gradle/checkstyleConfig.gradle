@@ -4,6 +4,11 @@
  *
  * Checkstyle configuration
  *
+ *
+ * Example for generating a Checkstyle report:
+ *
+ * gradlew -P aktoro.checkstyleMain build
+ *
  **************************************************************************/
 
 import static com.varmateo.gradle.Utils.enableTaskOnlyIfSelected

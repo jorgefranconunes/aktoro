@@ -1,0 +1,19 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017 Aktoro project contributors.
+ *
+ * Jacoco configuration
+ *
+ *
+ * Example for running tests with Jacoco turned on:
+ *
+ * gradlew -P aktoro.jacocoReport build
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Utils.onlyIfTaskSelected
+
+
+onlyIfTaskSelected("jacocoReport") {
+    apply plugin: 'jacoco'
+}

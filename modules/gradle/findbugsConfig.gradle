@@ -4,6 +4,11 @@
  *
  * Findbugs configuration
  *
+ *
+ * Example for generating a FindBugs report:
+ *
+ * gradlew -P aktoro.findbugsMain build
+ *
  **************************************************************************/
 
 import static com.varmateo.gradle.Utils.enableTaskOnlyIfSelected
