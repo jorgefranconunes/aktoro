@@ -32,7 +32,7 @@
 
     <link
        rel="stylesheet"
-       href="../aktoro-site.css?v=6253ebe4-8d9a-4a73-bb87-0f62cc96843d" />
+       href="../aktoro-site.css?v=7856db3c-150c-49e6-88b7-05250e1ca87f" />
 
   </head>
 
@@ -81,8 +81,9 @@
 <li><a href="#_edit_compile_run_cycle">4. Edit/compile/run cycle</a></li>
 <li><a href="#_running_unit_tests">5. Running unit tests</a></li>
 <li><a href="#_running_integration_tests">6. Running integration tests</a></li>
-<li><a href="#_code_quality_reports">7. Code quality reports</a></li>
-<li><a href="#_creating_a_new_release">8. Creating a new release</a></li>
+<li><a href="#_installing_project_jars_into_local_maven_repository">7. Installing project JARs into local Maven repository</a></li>
+<li><a href="#_code_quality_reports">8. Code quality reports</a></li>
+<li><a href="#_creating_a_new_release">9. Creating a new release</a></li>
 </ul>
 </div>
 <div class="sect1">
@@ -194,6 +195,13 @@ integration tests with the build do the following:</p>
 <pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew -P aktoro.integrationTest build</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>In this section, and in the following sections, the examples with the
+command for executing the Gradle wrapper (<code>./modules/gradlew</code>) assume
+the current working directory is the project top directory. In fact,
+you can run the <code>gradlew</code> command from any directory, and it will work
+as intended.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -268,7 +276,26 @@ ending in <code>IT</code>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_code_quality_reports">7. Code quality reports</h2>
+<h2 id="_installing_project_jars_into_local_maven_repository">7. Installing project JARs into local Maven repository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Sometimes it is usefull to install SNAPSHOT versions of the project
+JARs into the local Maven repository. This allows for local testing of
+a modified Aktoro build within another project.</p>
+</div>
+<div class="paragraph">
+<p>To install the project JARs into the local Maven repository (tipically
+<code>~/.m2/repository</code>) do the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew install</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_code_quality_reports">8. Code quality reports</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To generate static analysis and test code coverage reports do the
@@ -300,7 +327,7 @@ at <code>./target/CodeQualityReports/index.html</code>.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_creating_a_new_release">8. Creating a new release</h2>
+<h2 id="_creating_a_new_release">9. Creating a new release</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><strong>THE INFORMATION IN THIS SECTION IS NOT YET VALID.</strong></p>
@@ -335,7 +362,7 @@ working area.</p>
     Baked with
     <a href="http://yawg.varmateo.com/">Yawg 0.9.8</a>
     |
-    Last update 2018-01-01 10:26 UTC
+    Last update 2018-01-01 16:30 UTC
   </p>
 </footer>
 
