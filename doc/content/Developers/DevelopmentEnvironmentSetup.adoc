@@ -165,7 +165,16 @@ ending in `IT`.
 
 == Code quality reports
 
-*THE INFORMATION IN THIS SECTION IS NOT YET VALID.*
+To generate static analysis and test code coverage reports do the
+following:
+
+[source,sh]
+----
+./modules/gradlew -P aktoro.buildReports build
+----
+
+
+*THE INFORMATION IN THE REMAINDER OF THIS SECTION IS NOT YET VALID.*
 
 To generate static analysis and test code coverage reports do the
 following:

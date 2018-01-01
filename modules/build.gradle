@@ -40,16 +40,12 @@ subprojects {
     version = aktoroVersion
     group = "com.varmateo.aktoro"
 
-    repositories {
-        mavenCentral()
-    }
-
-    project.sourceCompatibility = "1.8"
+    sourceCompatibility = "1.8"
 
     apply from: "${rootDir}/gradle/checkstyleConfig.gradle"
     apply from: "${rootDir}/gradle/findbugsConfig.gradle"
     apply from: "${rootDir}/gradle/jacocoConfig.gradle"
-    //apply from: "${rootDir}/gradle/javadocConfig.gradle"
+    apply from: "${rootDir}/gradle/javadocConfig.gradle"
     apply from: "${rootDir}/gradle/pmdConfig.gradle"
     apply from: "${rootDir}/gradle/testConfig.gradle"
 }
@@ -59,9 +55,7 @@ subprojects {
  *
  */
 task clean(type: Delete) {
-
     delete buildDir
-
     dependsOn subprojects.collect { it.tasks.getByName("clean") }
 }
 
@@ -84,36 +78,6 @@ task build {
 
 
 /**
- * Jacoco aggregate report
+ * Configures the Jacoco aggregate report.
  */
-onlyIfTaskSelected("jacocoReport") {
-
-    apply plugin: 'jacoco'
-
-    task jacocoReport(type: JacocoReport) {
-
-        def projectRootDir = project.rootDir.absolutePath
-        executionData fileTree(projectRootDir).include("**/build/jacoco/*.exec")
-
-        subprojects.each {
-            sourceSets it.sourceSets.main
-        }
-
-        reports {
-            xml.enabled true
-            xml.destination file("${buildDir}/reports/jacoco/report.xml")
-            html.enabled true
-            csv.enabled false
-        }
-
-        dependsOn subprojects.collect { it.tasks.withType(Test) }
-    }
-
-    check.dependsOn jacocoReport
-}
-
-
-/**
- *
- */
-//apply from: "${rootDir}/gradle/aggregatedReportsConfig.gradle"
+apply from: "${rootDir}/gradle/jacocoAggregateConfig.gradle"

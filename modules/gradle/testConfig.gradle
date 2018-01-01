@@ -31,10 +31,6 @@ def buildTestTaskCommonConfiguration(final String testClassPattern) {
         }
 
         afterSuite this.&printTestResult
-
-        // We do not generate the HTML report for each sub-project
-        // because the aggregatedTestReport will also generate HTML.
-        reports.html.enabled = false
     }
 }
 

@@ -28,21 +28,9 @@ final class Utils {
      */
     static void enableTaskOnlyIfSelected(final Task task) {
 
-        String propNameSufix = task.name
-        Closure<Boolean> closure = {
-            String propName = rootProject.name + "." + propNameSufix
-            boolean isExecutionDesired =
-                    project.hasProperty(propName) && (project[propName] != "no")
-            boolean isTargetTask =
-                    gradle.startParameter.taskNames.contains(task.name)
-            boolean isExecutionEnabled =
-                    isExecutionDesired || isTargetTask
-
-            isExecutionEnabled
+        task.onlyIf {
+            isTaskExecutionEnabled(task.project, task.name)
         }
-        closure.delegate = task.project
-
-        task.onlyIf closure
     }
 
 
@@ -56,17 +44,49 @@ final class Utils {
 
         def context = closure.delegate
         Project project = context.project
-        String propName = project.rootProject.name + "." + taskName
-        boolean isExecutionDesired =
-                project.hasProperty(propName) && (project.getProperty(propName) != "no")
-        boolean isTargetTask =
-                project.gradle.startParameter.taskNames.contains(taskName)
-       boolean isExecutionEnabled =
-               isExecutionDesired || isTargetTask
+        boolean isExecutionEnabled = isTaskExecutionEnabled(project, taskName)
 
        if ( isExecutionEnabled ) {
            closure.call()
        }
+    }
+
+
+    /**
+     *
+     */
+    private static boolean isTaskExecutionEnabled(
+            final Project project,
+            final String taskName) {
+
+        String rootProjectName = project.rootProject.name
+        boolean isExecutionDesired =
+                isPropEnabled(project, rootProjectName + "." + taskName)
+        boolean isTargetTask =
+                project.gradle.startParameter.taskNames.contains(taskName)
+        boolean isBuildReportsDesired =
+                isPropEnabled(project, rootProjectName + ".buildReports")
+        boolean isExecutionEnabled =
+                isExecutionDesired || isTargetTask || isBuildReportsDesired
+
+       return isExecutionEnabled
+    }
+
+
+    /**
+     *
+     */
+    private static boolean isPropEnabled(
+            final Project project,
+            final String propName) {
+
+        if ( project.hasProperty(propName) ) {
+            def propValue = project.getProperty(propName)
+
+            return propValue != "no"
+        } else {
+            return false
+        }
     }
 
 }

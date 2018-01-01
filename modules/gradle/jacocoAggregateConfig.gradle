@@ -1,0 +1,39 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017 Aktoro project contributors.
+ *
+ * Configuration for the main Jacoco aggregate report. This is only
+ * intended for use by the root project.
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Utils.onlyIfTaskSelected
+
+
+onlyIfTaskSelected("jacocoAggregateReport") {
+
+    apply plugin: 'jacoco'
+
+    task jacocoAggregateReport(type: JacocoReport) {
+
+        def projectRootDir = project.rootDir.absolutePath
+        executionData fileTree(projectRootDir).include("**/build/jacoco/*.exec")
+
+        subprojects.each {
+            sourceSets it.sourceSets.main
+        }
+
+        reports {
+            xml.enabled true
+            xml.destination file("${buildDir}/reports/jacoco/report.xml")
+            html.enabled true
+            csv.enabled false
+        }
+
+        dependsOn subprojects.collect { it.tasks.withType(Test) }
+
+        // Tack "check" must have been already defined at the point
+        // this Gradle script is applied in the main build.gradle.
+        dependsOn project.rootProject.tasks.getByName("check")
+    }
+}

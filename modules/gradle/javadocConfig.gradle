@@ -2,11 +2,13 @@
  *
  * Copyright (c) 2017 Aktoro project contributors.
  *
+ * Javadoc configuration
+ *
  **************************************************************************/
 
-/**
- * Javadoc configuration
- */
+import static com.varmateo.gradle.Utils.enableTaskOnlyIfSelected
+
+
 javadoc {
     options {
         author = true
@@ -16,3 +18,6 @@ javadoc {
         windowTitle = "Aktoro ${project.version}"
     }
 }
+
+enableTaskOnlyIfSelected javadoc
+
