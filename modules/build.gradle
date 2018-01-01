@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2017 Aktoro project contributors.
+ * Copyright (c) 2017-2018 Aktoro project contributors.
  *
  **************************************************************************/
 
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
-import static com.varmateo.gradle.Utils.onlyIfTaskSelected
+import static com.varmateo.gradle.Tasks.onlyIfTaskSelected
 
 
 ext.aktoroVersion =  "0.0.1-SNAPSHOT"
@@ -56,6 +56,7 @@ subprojects {
  */
 task clean(type: Delete) {
     delete buildDir
+    // delete "${rootDir}/buildSrc/build"
     dependsOn subprojects.collect { it.tasks.getByName("clean") }
 }
 

@@ -485,7 +485,7 @@ Copyright (c) 2017 Aktoro project contributors.
 
   <licenses>
     <license>
-      <name>GNU General Public License (GPL) version 3.0</name>
+      <name>GNU Lesser General Public License (LGPL) version 3.0</name>
       <url>https://www.gnu.org/licenses/lgpl-3.0.en.html</url>
     </license>
   </licenses>
@@ -499,9 +499,9 @@ Copyright (c) 2017 Aktoro project contributors.
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/jorgefranconunes/aktoro.git</connection>
-    <developerConnection>scm:git:ssh://github.com:jorgefranconunes/aktoro.git</developerConnection>
-    <url>http://github.com/jorgefranconunes/aktoro/tree/master</url>
+    <connection>scm:git:https://github.com/jorgefranconunes/aktoro.git</connection>
+    <developerConnection>scm:git:git@github.com:jorgefranconunes/aktoro.git</developerConnection>
+    <url>https://github.com/jorgefranconunes/aktoro</url>
 </scm>
 
 

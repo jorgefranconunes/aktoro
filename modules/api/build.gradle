@@ -1,4 +1,15 @@
-apply plugin : 'java'
+/**************************************************************************
+ *
+ * Copyright (c) 2017-2018 Aktoro project contributors.
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Poms.buildPomConfiguration
+
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
 
 jar {
     baseName 'aktoro-api'
@@ -8,4 +19,16 @@ dependencies {
     testCompile "junit:junit:$junitVersion"
     testCompile "org.assertj:assertj-core:$assertjCoreVersion"
     testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
+}
+
+def pomProjectName = "Aktoro Project"
+def pomProjectDescription = "Actor library for Java."
+def aktoroPom = buildPomConfiguration(pomProjectName, pomProjectDescription)
+
+install {
+    repositories {
+        mavenInstaller {
+            pom aktoroPom
+        }
+    }
 }

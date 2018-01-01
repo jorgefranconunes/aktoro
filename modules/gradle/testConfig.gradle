@@ -1,16 +1,16 @@
 /**************************************************************************
  *
- * Copyright (c) 2017 Aktoro project contributors.
+ * Copyright (c) 2017-2018 Aktoro project contributors.
  *
  * Unit tests configuration.
  *
  * Example of running one single test from the command line:
  *
- *    gw test --tests \*.ActorRefImplTest
+ *    gradlew test --tests \*.ActorRefImplTest
  *
  **************************************************************************/
 
-import static com.varmateo.gradle.Utils.enableTaskOnlyIfSelected
+import static com.varmateo.gradle.Tasks.enableTaskOnlyIfSelected
 
 
 /**

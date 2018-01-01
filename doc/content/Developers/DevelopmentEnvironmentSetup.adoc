@@ -94,6 +94,12 @@ integration tests with the build do the following:
 ./modules/gradlew -P aktoro.integrationTest build
 ----
 
+In this section, and in the following sections, the examples with the
+command for executing the Gradle wrapper (`./modules/gradlew`) assume
+the current working directory is the project top directory. In fact,
+you can run the `gradlew` command from any directory, and it will work
+as intended.
+
 
 
 
@@ -158,6 +164,24 @@ Running just one single integration test suite, or one single
 integraton test is the exact same procedure as for unit tests. By
 convention classes containing integration tests test suites have names
 ending in `IT`.
+
+
+
+
+
+== Installing project JARs into local Maven repository
+
+Sometimes it is usefull to install SNAPSHOT versions of the project
+JARs into the local Maven repository. This allows for local testing of
+a modified Aktoro build within another project.
+
+To install the project JARs into the local Maven repository (tipically
+`~/.m2/repository`) do the following:
+
+[source,sh]
+----
+./modules/gradlew install
+----
 
 
 

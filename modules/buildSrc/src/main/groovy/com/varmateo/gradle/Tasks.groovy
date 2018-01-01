@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2017 Aktoro project contributors.
+ * Copyright (c) 2017-2018 Aktoro project contributors.
  *
  **************************************************************************/
 
@@ -11,9 +11,9 @@ import org.gradle.api.Task
 
 
 /**
- * Povides utility functions.
+ * Utility functions for managing Gradle tasks.
  */
-final class Utils {
+final class Tasks {
 
 
     /**
