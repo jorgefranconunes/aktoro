@@ -1,0 +1,30 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017-2018 Aktoro project contributors.
+ *
+ * Task for generating a Checkstyle report.
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Tasks.onlyIfReportTaskSelected
+
+
+task buildCheckstyleReport {
+}
+
+
+onlyIfReportTaskSelected("buildCheckstyleReport") {
+
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        configDir = file("${rootDir}/src/main/config/checkstyle")
+        ignoreFailures = true
+        showViolations = false
+        toolVersion "7.1.2"
+    }
+
+    checkstyleTest.enabled = false
+
+    buildCheckstyleReport.dependsOn checkstyleMain
+}

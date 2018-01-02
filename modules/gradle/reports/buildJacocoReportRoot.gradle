@@ -7,14 +7,18 @@
  *
  **************************************************************************/
 
-import static com.varmateo.gradle.Tasks.onlyIfTaskSelected
+import static com.varmateo.gradle.Tasks.onlyIfReportTaskSelected
 
 
-onlyIfTaskSelected("jacocoAggregateReport") {
+task buildJacocoReport {
+}
+
+
+onlyIfReportTaskSelected("buildJacocoReport") {
 
     apply plugin: 'jacoco'
 
-    task jacocoAggregateReport(type: JacocoReport) {
+    task jacocoReport(type: JacocoReport) {
 
         def projectRootDir = project.rootDir.absolutePath
         executionData fileTree(projectRootDir).include("**/build/jacoco/*.exec")
@@ -29,11 +33,7 @@ onlyIfTaskSelected("jacocoAggregateReport") {
             html.enabled true
             csv.enabled false
         }
-
-        dependsOn subprojects.collect { it.tasks.withType(Test) }
-
-        // Tack "check" must have been already defined at the point
-        // this Gradle script is applied in the main build.gradle.
-        dependsOn project.rootProject.tasks.getByName("check")
     }
+
+    buildJacocoReport.dependsOn jacocoReport
 }

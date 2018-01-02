@@ -8,12 +8,12 @@ import static com.varmateo.gradle.Poms.buildPomConfiguration
 
 
 apply plugin: 'java'
-apply plugin: 'maven'
 
 
 jar {
     baseName 'aktoro-api'
 }
+
 
 dependencies {
     testCompile "junit:junit:$junitVersion"
@@ -21,14 +21,17 @@ dependencies {
     testCompile "org.mockito:mockito-core:$mockitoCoreVersion"
 }
 
+
+/**
+ * Needed by the "mavenInstall", "mavenDeploy" tasks.
+ */
 def pomProjectName = "Aktoro Project"
 def pomProjectDescription = "Actor library for Java."
-def aktoroPom = buildPomConfiguration(pomProjectName, pomProjectDescription)
+project.ext.projectPom = buildPomConfiguration(pomProjectName, pomProjectDescription)
 
-install {
-    repositories {
-        mavenInstaller {
-            pom aktoroPom
-        }
-    }
-}
+
+/**
+ * Standard tasks for a Java library.
+ */
+apply from: "${rootDir}/gradle/buildReports.gradle"
+apply from: "${rootDir}/gradle/mavenDeploy.gradle"

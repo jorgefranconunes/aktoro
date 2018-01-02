@@ -1,0 +1,38 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2018 Aktoro project contributors.
+ *
+ * Task for generating Maven artifacts for deployment into Maven
+ * Central.
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Tasks.onlyIfDeployTaskSelected
+
+
+task buildSourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    baseName  jar.baseName
+    classifier "sources"
+}
+
+
+task buildJavadocJar(type: Jar) {
+    from javadoc.destinationDir
+    baseName jar.baseName
+    classifier "javadoc"
+    dependsOn javadoc
+}
+
+
+task buildMavenDeployArtifacts {
+    dependsOn jar, buildSourcesJar, buildJavadocJar
+}
+
+
+onlyIfDeployTaskSelected("buildMavenDeployArtifacts") {
+
+    project.artifacts {
+        archives jar, buildSourcesJar, buildJavadocJar
+    }
+}

@@ -1,0 +1,21 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2018 Aktoro project contributors.
+ *
+ * Task for generating static analysis and code coverage reports.This
+ * is only intended for use by the root project.
+ *
+ **************************************************************************/
+
+
+apply from: "${rootDir}/gradle/reports/buildJacocoReportRoot.gradle"
+
+
+task buildReports {
+
+    def taskDependencies = [
+        buildJacocoReport
+    ]
+
+    dependsOn(*taskDependencies)
+}
