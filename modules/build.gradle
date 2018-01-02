@@ -42,17 +42,14 @@ subprojects {
 
     sourceCompatibility = "1.8"
 
-    apply from: "${rootDir}/gradle/checkstyleConfig.gradle"
-    apply from: "${rootDir}/gradle/findbugsConfig.gradle"
-    apply from: "${rootDir}/gradle/jacocoConfig.gradle"
+    // Default configurations for tasks defined by the java plugin.
     apply from: "${rootDir}/gradle/javadocConfig.gradle"
-    apply from: "${rootDir}/gradle/pmdConfig.gradle"
     apply from: "${rootDir}/gradle/testConfig.gradle"
 }
 
 
 /**
- *
+ * Cleans the root project reports.
  */
 task clean(type: Delete) {
     delete buildDir
@@ -62,23 +59,7 @@ task clean(type: Delete) {
 
 
 /**
- *
+ * Configures the aggregate reports.
  */
-task check {
-    dependsOn subprojects.collect { it.tasks.getByName("check") }
-}
+apply from: "${rootDir}/gradle/buildReportsRoot.gradle"
 
-
-/**
- *
- */
-task build {
-    dependsOn subprojects.collect { it.tasks.getByName("build") }
-    dependsOn check
-}
-
-
-/**
- * Configures the Jacoco aggregate report.
- */
-apply from: "${rootDir}/gradle/jacocoAggregateConfig.gradle"

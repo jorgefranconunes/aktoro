@@ -1,0 +1,12 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017-2018 Aktoro project contributors.
+ *
+ * Task for generating the test results report.
+ *
+ **************************************************************************/
+
+
+task buildTestReport {
+    dependsOn test, integrationTest
+}

@@ -175,12 +175,12 @@ Sometimes it is usefull to install SNAPSHOT versions of the project
 JARs into the local Maven repository. This allows for local testing of
 a modified Aktoro build within another project.
 
-To install the project JARs into the local Maven repository (tipically
+To install the project JARs into the local Maven repository (typically
 `~/.m2/repository`) do the following:
 
 [source,sh]
 ----
-./modules/gradlew install
+./modules/gradlew mavenInstall
 ----
 
 
@@ -194,7 +194,7 @@ following:
 
 [source,sh]
 ----
-./modules/gradlew -P aktoro.buildReports build
+./modules/gradlew buildReports
 ----
 
 
@@ -224,7 +224,7 @@ at `./target/CodeQualityReports/index.html`.
 To generate the tarball for an engineering build do the following:
 
 ----
-./devtools/bin/build-create-bundle
+./devtools/bin/build-bundle
 ----
 
 The above will perform a full build and create a tarball named
@@ -232,5 +232,5 @@ The above will perform a full build and create a tarball named
 working area.
 
 To generate an official release see the instructions at
-link:CreatingRelease.html[Creating a release of the Yawg software].
+link:CreatingRelease.html[Creating a release of the Aktoro software].
 

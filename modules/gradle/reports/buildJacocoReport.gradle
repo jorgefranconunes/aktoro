@@ -1,0 +1,25 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017-2018 Aktoro project contributors.
+ *
+ * Task for generating Jacoco execution data.
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Tasks.onlyIfReportTaskSelected
+
+
+task buildJacocoReport {
+}
+
+
+onlyIfReportTaskSelected("buildJacocoReport") {
+
+    apply plugin: 'jacoco'
+
+    buildJacocoReport.dependsOn test, integrationTest
+}
+
+rootProject.buildJacocoReport {
+    dependsOn buildJacocoReport
+}

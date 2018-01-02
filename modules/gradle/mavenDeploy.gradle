@@ -1,0 +1,23 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2018 Aktoro project contributors.
+ *
+ * Tasks related with installing ("mavenInstall") and deploying
+* ("mavenDeploy") build artifacts into Maven repositories.
+ *
+ **************************************************************************/
+
+
+apply from: "${rootDir}/gradle/maven/mavenInstall.gradle"
+apply from: "${rootDir}/gradle/maven/buildMavenDeployArtifacts.gradle"
+
+
+task mavenDeploy {
+
+    def taskDependencies = [
+        buildMavenDeployArtifacts
+        // TBD
+    ]
+
+    dependsOn(*taskDependencies)
+}

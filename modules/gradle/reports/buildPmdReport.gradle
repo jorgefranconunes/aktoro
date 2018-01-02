@@ -1,0 +1,29 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017-2018 Aktoro project contributors.
+ *
+ * Task for generating a PMD report.
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Tasks.onlyIfReportTaskSelected
+
+
+task buildPmdReport {
+}
+
+
+onlyIfReportTaskSelected("buildPmdReport") {
+
+    apply plugin : 'pmd'
+
+    pmd {
+        ignoreFailures = true
+        ruleSetFiles = files("${rootDir}/src/main/config/pmd/ruleset.xml")
+        toolVersion "5.8.1"
+    }
+
+    pmdTest.enabled = false
+
+    buildPmdReport.dependsOn pmdMain
+}
