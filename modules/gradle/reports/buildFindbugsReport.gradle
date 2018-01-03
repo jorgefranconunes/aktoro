@@ -1,0 +1,34 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2017-2018 Aktoro project contributors.
+ *
+ * Task for generating a Findbugs report.
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Tasks.onlyIfReportTaskSelected
+
+
+task buildFindbugsReport {
+}
+
+
+onlyIfReportTaskSelected("buildFindbugsReport") {
+
+    apply plugin : 'findbugs'
+
+    findbugs {
+        ignoreFailures = true
+    }
+
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled true
+            xml.withMessages = true
+        }
+    }
+
+    findbugsTest.enabled = false
+
+    buildFindbugsReport.dependsOn findbugsMain
+}

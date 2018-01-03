@@ -6,8 +6,6 @@
  *
  **************************************************************************/
 
-import static com.varmateo.gradle.Tasks.enableTaskOnlyIfSelected
-
 
 javadoc {
     options {
@@ -18,6 +16,3 @@ javadoc {
         windowTitle = "Aktoro ${project.version}"
     }
 }
-
-enableTaskOnlyIfSelected javadoc
-

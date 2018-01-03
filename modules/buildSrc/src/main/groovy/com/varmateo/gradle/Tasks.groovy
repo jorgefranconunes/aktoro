@@ -16,6 +16,10 @@ import org.gradle.api.Task
 final class Tasks {
 
 
+    public static final String GROUP_REPORTS = "buildReports"
+    public static final String GROUP_DEPLOY = "mavenDeploy"
+
+
     /**
      * Enables the given task if one of the following conditions is
      * satisfied:
@@ -26,10 +30,34 @@ final class Tasks {
      * The task name was specified as one of the targets for the
      * "gradle" command.
      */
-    static void enableTaskOnlyIfSelected(final Task task) {
+    public static void enableReportTaskOnlyIfSelected(final Task task) {
+
+        List<String> propNames = [ task.name, GROUP_REPORTS ]
+
+        enableTaskOnlyIfSelectedByProp(task, propNames)
+    }
+
+
+    /**
+     *
+     */
+    public static void enableDeployTaskOnlyIfSelected(final Task task) {
+
+        List<String> propNames = [ task.name, GROUP_DEPLOY ]
+
+        enableTaskOnlyIfSelectedByProp(task, propNames)
+    }
+
+
+    /**
+     *
+     */
+    private static void enableTaskOnlyIfSelectedByProp(
+            final Task task,
+            final List<String> propNames) {
 
         task.onlyIf {
-            isTaskExecutionEnabled(task.project, task.name)
+            isTaskExecutionEnabled(task.project, propNames)
         }
     }
 
@@ -38,13 +66,38 @@ final class Tasks {
      * Executes the given closure if a task with the given name is
      * currently selected to be executed.
      */
-    static void onlyIfTaskSelected(
+    public static void onlyIfReportTaskSelected(
             final String taskName,
             final Closure closure) {
 
-        def context = closure.delegate
-        Project project = context.project
-        boolean isExecutionEnabled = isTaskExecutionEnabled(project, taskName)
+        List<String> propNames = [ taskName, GROUP_REPORTS ]
+
+        onlyIfTaskSelectedByProp(propNames, closure)
+    }
+
+
+    /**
+     * 
+     */
+    public static void onlyIfDeployTaskSelected(
+            final String taskName,
+            final Closure closure) {
+
+        List<String> propNames = [ taskName, GROUP_DEPLOY ]
+
+        onlyIfTaskSelectedByProp(propNames, closure)
+    }
+
+
+    /**
+     *
+     */
+    private static void onlyIfTaskSelectedByProp(
+            final List<String> propNames,
+            final Closure closure) {
+
+        Project project = closure.delegate.project
+        boolean isExecutionEnabled = isTaskExecutionEnabled(project, propNames)
 
        if ( isExecutionEnabled ) {
            closure.call()
@@ -57,17 +110,20 @@ final class Tasks {
      */
     private static boolean isTaskExecutionEnabled(
             final Project project,
-            final String taskName) {
+            final List<String> propNames) {
 
-        String rootProjectName = project.rootProject.name
-        boolean isExecutionDesired =
-                isPropEnabled(project, rootProjectName + "." + taskName)
-        boolean isTargetTask =
-                project.gradle.startParameter.taskNames.contains(taskName)
-        boolean isBuildReportsDesired =
-                isPropEnabled(project, rootProjectName + ".buildReports")
+        boolean isExecutionDesired = propNames.inject(false) {
+            boolean result, String propName ->
+            result || isPropEnabled(project, propName);
+        }
+
+        boolean isTargetTask = propNames.inject(false) {
+            boolean result, String propName ->
+            result || project.gradle.startParameter.taskNames.contains(propName)
+        }
+
         boolean isExecutionEnabled =
-                isExecutionDesired || isTargetTask || isBuildReportsDesired
+                isExecutionDesired || isTargetTask
 
        return isExecutionEnabled
     }
@@ -78,7 +134,10 @@ final class Tasks {
      */
     private static boolean isPropEnabled(
             final Project project,
-            final String propName) {
+            final String propNameSuffix) {
+
+        String rootProjectName = project.rootProject.name
+        String propName = rootProjectName + "." + propNameSuffix
 
         if ( project.hasProperty(propName) ) {
             def propValue = project.getProperty(propName)

@@ -10,7 +10,7 @@
  *
  **************************************************************************/
 
-import static com.varmateo.gradle.Tasks.enableTaskOnlyIfSelected
+import static com.varmateo.gradle.Tasks.enableReportTaskOnlyIfSelected
 
 
 /**
@@ -76,7 +76,7 @@ task integrationTest(type: Test) {
 
 integrationTest buildTestTaskCommonConfiguration("**/*IT.class")
 
-enableTaskOnlyIfSelected integrationTest
+enableReportTaskOnlyIfSelected integrationTest
 
 integrationTest.mustRunAfter test
 check.dependsOn integrationTest
