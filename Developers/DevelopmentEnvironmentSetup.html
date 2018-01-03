@@ -32,7 +32,7 @@
 
     <link
        rel="stylesheet"
-       href="../aktoro-site.css?v=7856db3c-150c-49e6-88b7-05250e1ca87f" />
+       href="../aktoro-site.css?v=6f6dadbb-7161-4f03-bbf5-ea60b2466cc9" />
 
   </head>
 
@@ -284,12 +284,12 @@ JARs into the local Maven repository. This allows for local testing of
 a modified Aktoro build within another project.</p>
 </div>
 <div class="paragraph">
-<p>To install the project JARs into the local Maven repository (tipically
+<p>To install the project JARs into the local Maven repository (typically
 <code>~/.m2/repository</code>) do the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew install</code></pre>
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew mavenInstall</code></pre>
 </div>
 </div>
 </div>
@@ -303,7 +303,7 @@ following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew -P aktoro.buildReports build</code></pre>
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew buildReports</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -337,7 +337,7 @@ at <code>./target/CodeQualityReports/index.html</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>./devtools/bin/build-create-bundle</pre>
+<pre>./devtools/bin/build-bundle</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -347,7 +347,7 @@ working area.</p>
 </div>
 <div class="paragraph">
 <p>To generate an official release see the instructions at
-<a href="CreatingRelease.html">Creating a release of the Yawg software</a>.</p>
+<a href="CreatingRelease.html">Creating a release of the Aktoro software</a>.</p>
 </div>
 </div>
 </div>
@@ -362,7 +362,7 @@ working area.</p>
     Baked with
     <a href="http://yawg.varmateo.com/">Yawg 0.9.8</a>
     |
-    Last update 2018-01-01 16:30 UTC
+    Last update 2018-01-03 18:22 UTC
   </p>
 </footer>
 
