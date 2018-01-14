@@ -25,14 +25,14 @@ task buildJavadocJar(type: Jar) {
 }
 
 
-task buildMavenDeployArtifacts {
+task mavenBuildArtifacts {
     dependsOn jar, buildSourcesJar, buildJavadocJar
 }
 
 
-onlyIfDeployTaskSelected("buildMavenDeployArtifacts") {
+onlyIfDeployTaskSelected("mavenBuildArtifacts") {
 
     project.artifacts {
-        archives jar, buildSourcesJar, buildJavadocJar
+        archives buildSourcesJar, buildJavadocJar
     }
 }

@@ -9,7 +9,8 @@ import org.gradle.testing.jacoco.tasks.JacocoReport
 import static com.varmateo.gradle.Tasks.onlyIfTaskSelected
 
 
-ext.aktoroVersion =  "0.0.1-SNAPSHOT"
+//ext.aktoroVersion =  "0.0.2-SNAPSHOT"
+ext.aktoroVersion =  "0.0.2"
 
 /**
  * Versions of dependencies to be used by all sub-projects.

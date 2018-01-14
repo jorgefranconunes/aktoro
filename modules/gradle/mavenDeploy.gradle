@@ -9,14 +9,15 @@
 
 
 apply from: "${rootDir}/gradle/maven/mavenInstall.gradle"
-apply from: "${rootDir}/gradle/maven/buildMavenDeployArtifacts.gradle"
+apply from: "${rootDir}/gradle/maven/mavenBuildArtifacts.gradle"
+apply from: "${rootDir}/gradle/maven/mavenDeployArtifacts.gradle"
 
 
 task mavenDeploy {
 
     def taskDependencies = [
-        buildMavenDeployArtifacts
-        // TBD
+            mavenBuildArtifacts,
+            mavenDeployArtifacts
     ]
 
     dependsOn(*taskDependencies)

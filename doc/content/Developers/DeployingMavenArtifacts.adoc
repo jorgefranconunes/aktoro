@@ -1,0 +1,164 @@
+= Deploying to Maven Central Repository
+
+
+
+
+
+== Introduction
+
+This document contains notes on deploying the Aktoro Maven artifacts
+to the Maven Central Repository.
+
+Information gleaned from the following sources:
+
+* https://maven.apache.org/guides/mini/guide-central-repository-upload.html[Guide
+  to uploading artifacts to the Central Repository]
+
+* http://central.sonatype.org/pages/ossrh-guide.html[OSSRH Guide]
+
+
+
+
+
+== Prepare GPG key
+
+A GPG key is required for signnig the Maven artifacts to be deployed
+to Maven Central.
+
+
+=== Install GnuPG
+
+* CentOS: gnupg2
+
+* Ubuntu: gnupg
+
+* Cygwin: gnupg
+
+
+=== Generate a key pair
+
+----
+gpg --gen-key
+----
+
+Please select what kind of key you want: -- (1) RSA and RSA (default)
+
+What keysize do you want? (2048) -- 2048
+
+Key is valid for? (0) -- 0 = key does not expire
+
+Real name: -- Jorge Nunes
+
+Email address: -- jorgefranconunes@gmail.com
+
+Comment: --
+
+
+=== Distribute GPG public key
+
+----
+gpg --keyserver hkp://keys.gnupg.net --send-key 701FCC65
+----
+
+
+
+
+
+== Create JIRA account
+
+https://issues.sonatype.org/
+
+* Username : jorgefranconunes
+* Email    : jorgefranconunes@gmail.com
+
+
+
+
+
+== Register Aktoro project on OSSRH
+
+https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&pid=10134
+
+Opened ticket https://issues.sonatype.org/browse/OSSRH-34084
+
+The URL of the Maven repository for deploying the project maven
+artifacts is the following:
+https://oss.sonatype.org/service/local/staging/deploy/maven2/
+
+
+
+
+
+== Add credentials to Maven settings
+
+Add the OSSRH Jira credentials, and the GnuPG key credentials to your
+`~/.gradle/gradle.properties`:
+
+----
+# GnuGPG credentials.
+signing.keyId=701FCC65
+signing.password=XXXXXX
+signing.secretKeyRingFile=/home/jfn/.gnupg/secring.gpg
+
+# OSSRH Jira credentials.
+aktoroOssrhUsername=jorgefranconunes
+aktoroOssrhPassword=XXXXXX
+----
+
+Make sure the file is readable only by the owner:
+
+[source, sh]
+----
+chmod 600 ~/.gradle/gradle.properties`
+----
+
+
+
+
+
+== Deploy to OSSRH staging respository
+
+Using Gradle directly, assuming the project version on
+`modules/build.gradle` does NOT contain "SNAPSHOT":
+
+[source, sh]
+----
+./modules/gradlew mavenDeploy
+----
+
+
+Or using our own tool to automatically update the version identifier:
+
+----
+./devtools/bin/build-create-bundle --release
+----
+
+
+
+
+
+== Release from OSSRH staging repo to Maven Central
+
+The actions described in this section follow the
+http://central.sonatype.org/pages/releasing-the-deployment.html[instructions
+from Sonatype] for OSSRH.
+
+* Go to https://oss.sonatype.org/ and login.
+
+* Look for the latest staging repository with a name starting with
+  `comvarmateo` (on the left vertical menu click "Build Promotions" ->
+  "Staging Repositories").
+
+* Check that the contents of that staging repository appear to be fine
+  (click the "comvarmateo-1234" entry in the search result pane, then
+  click the "Content" tab in the detail pane and browse the tree).
+
+* Click the `Close` action for the repository. This will prepare the
+  staging repository for being copied to Maven Central.
+
+* Click the `Release` action for the repository. This will copy the
+  staging repository to Maven Central. This process can take some
+  minutes to complete. You can confirm the process has completed by
+  checking on Maven Central at
+  https://repo1.maven.org/maven2/com/varmateo/aktoro/aktoro-api/ that
+  the new version is there.

@@ -1,0 +1,68 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2018 Aktoro project contributors.
+ *
+ * Task for deploying the build artifacts into a remote Maven
+ * repository.
+ *
+ * Some project properties must be defined beforehand. Because those
+ * properties refer to private information, like passwords, they
+ * should be defined in `~/.gradle/gradle.properties`.
+ *
+ * The required project properties are the following:
+ *
+ * aktoroOssrhUsername - Auth user name for the OSSRH staging
+ * repository.
+ *
+ * aktoroOssrhPassword - Auth password for the OSSRH staging repository.
+ *
+ * signing.keyId - GPG key identifier.
+ *
+ * signing.password - GPG key password.
+ *
+ * signing.secretKeyRingFile - GnuPG keys file. Almost surely
+ * `$HOME/.gnupg/secring.gpg`, unless you really know what you are
+ * doing.
+ *
+ **************************************************************************/
+
+import static com.varmateo.gradle.Tasks.onlyIfDeployTaskSelected
+
+
+def ossrhRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+def ossrhUsername = ext.aktoroOssrhUsername
+def ossrhPassword = ext.aktoroOssrhPassword
+
+
+task mavenDeployArtifacts {
+}
+
+
+onlyIfDeployTaskSelected("mavenDeployArtifacts") {
+
+    apply plugin: "maven"
+    apply plugin: "signing"
+
+    signing {
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                pom project.ext.projectPom
+                repository(url: ossrhRepoUrl) {
+                    authentication(
+                            userName: ossrhUsername,
+                            password: ossrhPassword)
+                }
+                beforeDeployment { MavenDeployment deployment ->
+                    signing.signPom(deployment)
+                }
+            }
+        }
+    }
+
+    uploadArchives.dependsOn mavenBuildArtifacts
+    mavenDeployArtifacts.dependsOn uploadArchives
+}
