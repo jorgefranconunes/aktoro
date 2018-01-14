@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+
+  <head>
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=UA-79615115-2">
+</script>
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-79615115-2');
+</script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Deploying to Maven Central Repository</title>
+
+    <link
+       rel="stylesheet"
+       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+       integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+       crossorigin="anonymous" />
+
+    <link
+       rel="stylesheet"
+       href="../aktoro-site.css?v=fad963c5-7086-4006-9f4c-6e6f05a26706" />
+
+  </head>
+
+  <body>
+
+    <div class="akt-body">
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="../index.html">Aktoro</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../Documentation/index.html">Documentation</a></li>
+    <li class="active"><a href="../Developers/index.html">Developers</a></li>
+            <li><a href="https://github.com/jorgefranconunes/aktoro/">GitHub repository</a></li>
+
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+
+      <div class="container akt-content">
+
+
+  <!#-- The breadcrumb bar is only visible if there is more than
+        one bread crumb on this page.-->
+
+    <ol class="breadcrumb">
+          <li><a href=".././index.html">Home</a></li>
+          <li><a href="../Developers/index.html">Developers</a></li>
+    </ol>
+
+        <h1>Deploying to Maven Central Repository</h1>
+        <div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This document contains notes on deploying the Aktoro Maven artifacts
+to the Maven Central Repository.</p>
+</div>
+<div class="paragraph">
+<p>Information gleaned from the following sources:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://maven.apache.org/guides/mini/guide-central-repository-upload.html">Guide
+to uploading artifacts to the Central Repository</a></p>
+</li>
+<li>
+<p><a href="http://central.sonatype.org/pages/ossrh-guide.html">OSSRH Guide</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prepare_gpg_key">Prepare GPG key</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A GPG key is required for signnig the Maven artifacts to be deployed
+to Maven Central.</p>
+</div>
+<div class="sect2">
+<h3 id="_install_gnupg">Install GnuPG</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>CentOS: gnupg2</p>
+</li>
+<li>
+<p>Ubuntu: gnupg</p>
+</li>
+<li>
+<p>Cygwin: gnupg</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generate_a_key_pair">Generate a key pair</h3>
+<div class="listingblock">
+<div class="content">
+<pre>gpg --gen-key</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please select what kind of key you want:&#8201;&#8212;&#8201;(1) RSA and RSA (default)</p>
+</div>
+<div class="paragraph">
+<p>What keysize do you want? (2048)&#8201;&#8212;&#8201;2048</p>
+</div>
+<div class="paragraph">
+<p>Key is valid for? (0)&#8201;&#8212;&#8201;0 = key does not expire</p>
+</div>
+<div class="paragraph">
+<p>Real name:&#8201;&#8212;&#8201;Jorge Nunes</p>
+</div>
+<div class="paragraph">
+<p>Email address:&#8201;&#8212;&#8201;<a href="mailto:jorgefranconunes@gmail.com">jorgefranconunes@gmail.com</a></p>
+</div>
+<div class="paragraph">
+<p>Comment:&#8201;&#8212;&#8201;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_distribute_gpg_public_key">Distribute GPG public key</h3>
+<div class="listingblock">
+<div class="content">
+<pre>gpg --keyserver hkp://keys.gnupg.net --send-key 701FCC65</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_create_jira_account">Create JIRA account</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://issues.sonatype.org/" class="bare">https://issues.sonatype.org/</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Username : jorgefranconunes</p>
+</li>
+<li>
+<p>Email    : <a href="mailto:jorgefranconunes@gmail.com">jorgefranconunes@gmail.com</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_register_aktoro_project_on_ossrh">Register Aktoro project on OSSRH</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&amp;pid=10134" class="bare">https://issues.sonatype.org/secure/CreateIssue.jspa?issuetype=21&amp;pid=10134</a></p>
+</div>
+<div class="paragraph">
+<p>Opened ticket <a href="https://issues.sonatype.org/browse/OSSRH-34084" class="bare">https://issues.sonatype.org/browse/OSSRH-34084</a></p>
+</div>
+<div class="paragraph">
+<p>The URL of the Maven repository for deploying the project maven
+artifacts is the following:
+<a href="https://oss.sonatype.org/service/local/staging/deploy/maven2/" class="bare">https://oss.sonatype.org/service/local/staging/deploy/maven2/</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_add_credentials_to_maven_settings">Add credentials to Maven settings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add the OSSRH Jira credentials, and the GnuPG key credentials to your
+<code>~/.gradle/gradle.properties</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># GnuGPG credentials.
+signing.keyId=701FCC65
+signing.password=XXXXXX
+signing.secretKeyRingFile=/home/jfn/.gnupg/secring.gpg
+
+# OSSRH Jira credentials.
+aktoroOssrhUsername=jorgefranconunes
+aktoroOssrhPassword=XXXXXX</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Make sure the file is readable only by the owner:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">chmod 600 ~/.gradle/gradle.properties`</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_to_ossrh_staging_respository">Deploy to OSSRH staging respository</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Using Gradle directly, assuming the project version on
+<code>modules/build.gradle</code> does NOT contain "SNAPSHOT":</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew mavenDeploy</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or using our own tool to automatically update the version identifier:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>./devtools/bin/build-create-bundle --release</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_release_from_ossrh_staging_repo_to_maven_central">Release from OSSRH staging repo to Maven Central</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The actions described in this section follow the
+<a href="http://central.sonatype.org/pages/releasing-the-deployment.html">instructions
+from Sonatype</a> for OSSRH.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Go to <a href="https://oss.sonatype.org/" class="bare">https://oss.sonatype.org/</a> and login.</p>
+</li>
+<li>
+<p>Look for the latest staging repository with a name starting with
+<code>comvarmateo</code> (on the left vertical menu click "Build Promotions" &#8594;
+"Staging Repositories").</p>
+</li>
+<li>
+<p>Check that the contents of that staging repository appear to be fine
+(click the "comvarmateo-1234" entry in the search result pane, then
+click the "Content" tab in the detail pane and browse the tree).</p>
+</li>
+<li>
+<p>Click the <code>Close</code> action for the repository. This will prepare the
+staging repository for being copied to Maven Central.</p>
+</li>
+<li>
+<p>Click the <code>Release</code> action for the repository. This will copy the
+staging repository to Maven Central. This process can take some
+minutes to complete. You can confirm the process has completed by
+checking on Maven Central at
+<a href="https://repo1.maven.org/maven2/com/varmateo/aktoro/aktoro-api/" class="bare">https://repo1.maven.org/maven2/com/varmateo/aktoro/aktoro-api/</a> that
+the new version is there.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+<footer class="akt-footer">
+  <p>&copy;2017 Jorge Nunes</p>
+  <p>
+    Mixed with
+    <a href="http://getbootstrap.com/" target="_blank">Bootstrap 3.3.6</a>
+    |
+    Baked with
+    <a href="http://yawg.varmateo.com/">Yawg 0.9.8</a>
+    |
+    Last update 2018-01-14 12:55 UTC
+  </p>
+</footer>
+
+      </div>
+
+    </div>
+
+  </body>
+
+</html>
