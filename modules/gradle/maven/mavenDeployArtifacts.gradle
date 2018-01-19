@@ -29,16 +29,15 @@
 import static com.varmateo.gradle.Tasks.onlyIfDeployTaskSelected
 
 
-def ossrhRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-def ossrhUsername = ext.aktoroOssrhUsername
-def ossrhPassword = ext.aktoroOssrhPassword
-
-
 task mavenDeployArtifacts {
 }
 
 
 onlyIfDeployTaskSelected("mavenDeployArtifacts") {
+
+    def ossrhRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+    def ossrhUsername = ext.aktoroOssrhUsername
+    def ossrhPassword = ext.aktoroOssrhPassword
 
     apply plugin: "maven"
     apply plugin: "signing"
