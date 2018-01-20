@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2017 Aktoro project contributors.
+# Copyright (c) 2017-2018 Aktoro project contributors.
 #
 #
 # Creates a release bundle for the Aktoro software.
@@ -22,20 +22,19 @@ source ${_aktHome}/conf/aktoro-defaults.conf
 TOOL_NAME="Release builder"
 PRODUCT_HEADER="${AKT_PRODUCT_NAME} ${AKT_VERSION} - ${TOOL_NAME}"
 
-MAVEN_DEFAULT_TOOL=mvn
-MAVEN_DEFAULT_OPTIONS=""
-MAVEN_DEFAULT_GOALS="clean verify"
+GRADLE_DEFAULT_TOOL=${_aktHome}/modules/gradlew
+GRADLE_DEFAULT_OPTIONS=""
+GRADLE_DEFAULT_TASKS="clean build"
 
 _buildNumber=
 _jdkHome=
-_mavenTool=${MAVEN_DEFAULT_TOOL}
-_mavenHome=
-_mavenOptions=${MAVEN_DEFAULT_OPTIONS}
+_gradleTool=${GRADLE_DEFAULT_TOOL}
+_gradleOptions=${GRADLE_DEFAULT_OPTIONS}
 _isRelease=false
 _isWithTests=false
 _isWithReports=false
 
-_mavenGoals=${MAVEN_DEFAULT_GOALS}
+_gradleTasks=${GRADLE_DEFAULT_TASKS}
 _isWithLocalChanges=false
 _oldBuildNumber=SNAPSHOT
 _gitDir=${_aktHome}/.git
@@ -55,7 +54,7 @@ function main () {
 
     processCliArgs "$@"
 
-    prepareForMaven
+    prepareForGradle
     showConfig
     checkForLocalChanges
     checkBuildNumber
@@ -95,12 +94,8 @@ function processCliArgs () {
             --jdk-home=* )
                 _jdkHome=$(expr "$option" : '--jdk-home=\(.*\)')
                 ;;
-            --maven-home=* )
-                _mavenHome=$(expr "$option" : '--maven-home=\(.*\)')
-                _mavenTool=${_mavenHome}/bin/mvn
-                ;;
-            --maven-options=* )
-                _mavenOptions=$(expr "$option" : '--maven-options=\(.*\)')
+            --gradle-options=* )
+                _gradleOptions=$(expr "$option" : '--gradle-options=\(.*\)')
                 ;;
             --release )
                 _isRelease=true
@@ -140,10 +135,10 @@ function processCliArgs () {
         fi
     fi
 
-    if type "${_mavenTool}" > /dev/null 2>&1 ; then
+    if type "${_gradleTool}" > /dev/null 2>&1 ; then
         : # We found the Maven tool. Cool.
     else
-        aktError "Maven tool \"${_mavenTool}\" not found."
+        aktError "Gradle tool \"${_gradleTool}\" not found."
     fi
 
     if [ "${_isWithReports}" == true ] ; then
@@ -180,12 +175,8 @@ Available options:
 --jdk-home=PATH
     Base directory of the JDK 8 installation to be used in the build.
 
---maven-home=PATH
-    Base directory of the Maven 3 installation to be used in the
-    build.
-
---maven-options=STRING
-    Additional command line options passed to the Maven tool.
+--gradle-options=STRING
+    Additional command line options passed to the Gradle tool.
 
 --release
     Generates the additional Maven artifacts required for deploying to
@@ -216,31 +207,28 @@ EOF
 
 #######################################################################
 #
-# Prepares the Maven options and goals from the command line options.
+# Prepares the Gradle options and tasks from the command line options.
 #
 #######################################################################
 
-function prepareForMaven () {
+function prepareForGradle () {
 
     if [ "${_isWithTests}" == false ] ; then
-        _mavenOptions="${_mavenOptions} -DskipTests=true"
+        _gradleOptions="${_gradleOptions} -x test"
     else
-        _mavenOptions="${_mavenOptions} -DskipTests=false -Paktoro-jacoco"
+        _gradleOptions="${_gradleOptions} -Paktoro.integrationTest"
     fi
 
     if [ "${_isWithReports}" == true ] ; then
         local reportsDir=$(aktNormalizePath ${_reportsDir})
-        _mavenOptions="${_mavenOptions} -Daktoro.mavensite=${reportsDir}"
-        _mavenOptions="${_mavenOptions} -DskipTests=false"
-        _mavenOptions="${_mavenOptions} -Paktoro-mavensite"
-        _mavenGoals="clean verify site"
+        _gradleOptions="${_gradleOptions} -Paktoro.reportsDir=${reportsDir}"
+        _gradleTasks="clean build buildReports"
 
         mkdir -p ${_reportsDir}
     fi
 
     if [ "${_isRelease}" == true ] ; then
-        _mavenOptions="${_mavenOptions} -Paktoro-maven-artifacts"
-        _mavenGoals="clean deploy"
+        _gradleTasks="clean build mavenDeploy"
     fi
 }
 
@@ -263,13 +251,13 @@ function showConfig () {
 
     aktLog "${PRODUCT_HEADER}"
     aktLog "    JDK           : ${_jdkHome}"
-    aktLog "    Maven         : ${_mavenTool}"
-    aktLog "    Maven options : ${_mavenOptions}"
-    aktLog "    Maven goals   : ${_mavenGoals}"
+    aktLog "    Gradle        : ${_gradleTool}"
+    aktLog "    Gradleoptions : ${_gradleOptions}"
+    aktLog "    Gradle tasks  : ${_gradleTasks}"
     aktLog "    Build number  : ${buildNumberText}"
 
-    aktLog "Maven details:"
-    JAVA_HOME=${_jdkHome} ${_mavenTool} --version || aktError "Failed to obtain Maven details"
+    aktLog "Gradle details:"
+    JAVA_HOME=${_jdkHome} ${_gradleTool} --version || aktError "Failed to obtain Gradle details"
 }
 
 
@@ -419,10 +407,9 @@ function performBuild () {
 
     set -x
 
-    JAVA_HOME=${_jdkHome} ${_mavenTool} \
-        -f "${masterPom}" \
-        ${_mavenOptions} \
-        ${_mavenGoals}
+    JAVA_HOME=${_jdkHome} ${_gradleTool} \
+        ${_gradleOptions} \
+        ${_gradleTasks}
 
     local buildStatus=$?
     set +x
