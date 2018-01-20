@@ -42,15 +42,10 @@ below.
 | CentOS |
   `gnupg2`
 
-  `libxslt`
-
 | Ubuntu |
   `gnupg`
 
-  `xsltproc`
-
 | Cygwin |
-  `libxslt`
 
 |====
 

@@ -216,7 +216,7 @@ function prepareForGradle () {
     if [ "${_isWithTests}" == false ] ; then
         _gradleOptions="${_gradleOptions} -x test"
     else
-        _gradleOptions="${_gradleOptions} -Paktoro.integrationTest"
+        _gradleOptions="${_gradleOptions} -Paktoro.integrationTest -Paktoro.buildJacocoReport"
     fi
 
     if [ "${_isWithReports}" == true ] ; then
