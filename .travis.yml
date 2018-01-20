@@ -17,11 +17,6 @@ cache:
     - $HOME/.m2
     - $HOME/.gradle
 
-addons:
-  apt:
-    packages:
-      - xsltproc
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
@@ -36,7 +31,7 @@ before_deploy:
   - ssh-add ./devtools/conf/id_rsa-travisci-aktoro
 
 #
-# Bakes a new release of the Yawg site and uploads the changes to the
+# Bakes a new release of the Aktoro site and uploads the changes to the
 # GitHub pages repo.
 #
 deploy:

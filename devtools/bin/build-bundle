@@ -24,7 +24,7 @@ PRODUCT_HEADER="${AKT_PRODUCT_NAME} ${AKT_VERSION} - ${TOOL_NAME}"
 
 GRADLE_DEFAULT_TOOL=${_aktHome}/modules/gradlew
 GRADLE_DEFAULT_OPTIONS=""
-GRADLE_DEFAULT_TASKS="clean build"
+GRADLE_DEFAULT_TASKS="clean build buildJacocoReport"
 
 _buildNumber=
 _jdkHome=
@@ -216,7 +216,7 @@ function prepareForGradle () {
     if [ "${_isWithTests}" == false ] ; then
         _gradleOptions="${_gradleOptions} -x test"
     else
-        _gradleOptions="${_gradleOptions} -Paktoro.integrationTest -Paktoro.buildJacocoReport"
+        _gradleOptions="${_gradleOptions} -Paktoro.integrationTest"
     fi
 
     if [ "${_isWithReports}" == true ] ; then
