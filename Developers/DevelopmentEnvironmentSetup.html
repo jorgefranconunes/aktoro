@@ -32,7 +32,7 @@
 
     <link
        rel="stylesheet"
-       href="../aktoro-site.css?v=8d548a88-e890-4ea2-8e48-ba89bd0a7e71" />
+       href="../aktoro-site.css?v=1bb97628-6e70-4eb2-a916-403017171bfb" />
 
   </head>
 
@@ -190,7 +190,7 @@ integration tests with the build do the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew -P aktoro.integrationTest build</code></pre>
+<pre class="CodeRay highlight"><code data-lang="sh">./modules/gradlew integrationTest build</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -232,8 +232,8 @@ line:</p>
 </div>
 <div class="paragraph">
 <p>Of course, you can change the <code>ActorRefImplTest</code> above with the test
-suite you actually want to run.  By convention classes containing
-integration tests test suites have names ending in <code>Test</code>.</p>
+suite you actually want to run.  By convention classes containing unit
+tests suites have names ending in <code>Test</code>.</p>
 </div>
 <div class="paragraph">
 <p>And to run one single unit test:</p>
@@ -268,7 +268,7 @@ integration tests test suites have names ending in <code>Test</code>.</p>
 <div class="paragraph">
 <p>Running just one single integration test suite, or one single
 integraton test is the exact same procedure as for unit tests. By
-convention classes containing integration tests test suites have names
+convention classes containing integration tests suites have names
 ending in <code>IT</code>.</p>
 </div>
 </div>
@@ -340,7 +340,7 @@ at <code>./target/CodeQualityReports/index.html</code>.</p>
 </div>
 <div class="paragraph">
 <p>The above will perform a full build and create a tarball named
-<code>aktoro-0.0.1-yyyyMMddhhmm.tar.bz2</code> at the top of the
+<code>aktoro-0.0.2-SNAPSHOT-yyyyMMddhhmm.tar.bz2</code> at the top of the
 working area.</p>
 </div>
 <div class="paragraph">
@@ -352,7 +352,7 @@ working area.</p>
 
 
 <footer class="akt-footer">
-  <p>&copy;2017 Jorge Nunes</p>
+  <p>&copy;2018 Jorge Nunes</p>
   <p>
     Mixed with
     <a href="http://getbootstrap.com/" target="_blank">Bootstrap 3.3.6</a>
@@ -360,7 +360,7 @@ working area.</p>
     Baked with
     <a href="http://yawg.varmateo.com/">Yawg 0.9.8</a>
     |
-    Last update 2018-01-20 09:53 UTC
+    Last update 2018-01-21 11:32 UTC
   </p>
 </footer>
 
