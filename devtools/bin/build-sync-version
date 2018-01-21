@@ -143,7 +143,7 @@ function updateVersion () {
     local newVersion=$(source ${_masterConfFile} ; echo ${AKT_VERSION})
     myLog "Syncing version to ${newVersion}"
 
-    updateVersionInGradleFile
+    updateVersionInOtherFiles
 
     myLog "Done updating build number to ${_newBuildNumber}"
 }
@@ -185,9 +185,13 @@ function updateBuildNumberInConfigFile () {
 #
 #######################################################################
 
-function updateVersionInGradleFile() {
+function updateVersionInOtherFiles() {
 
     local newVersion=$(source ${_masterConfFile} ; echo ${AKT_VERSION})
+
+    #
+    # Gradle build file
+    #
     local gradleFile=${_aktHome}/modules/build.gradle
     local tmpGradleFile=${gradleFile}.new
 
@@ -196,6 +200,18 @@ function updateVersionInGradleFile() {
         > ${tmpGradleFile}
 
     mv ${tmpGradleFile} ${gradleFile}
+
+    #
+    # Site top Yawg configuration
+    #
+    local yawgFile=${_aktHome}/doc/content/.yawg.yml
+    local tmpYawgFile=${yawgFile}.new
+
+    sed "s/latestAktoroVersion: .*/latestAktoroVersion: ${newVersion}/" \
+        < ${yawgFile} \
+        > ${tmpYawgFile}
+
+    mv ${tmpYawgFile} ${yawgFile}
 }
 
 

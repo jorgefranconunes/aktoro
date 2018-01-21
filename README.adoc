@@ -1,6 +1,8 @@
 image:https://travis-ci.org/jorgefranconunes/aktoro.svg?branch=master["Build Status", link="https://travis-ci.org/jorgefranconunes/aktoro"]
 image:https://codecov.io/gh/jorgefranconunes/aktoro/branch/master/graph/badge.svg[codecov, link="https://codecov.io/gh/jorgefranconunes/aktoro"]
 image:https://api.codacy.com/project/badge/Grade/7b9faf6bcd2a4537baf2a8ca418cad51["Codacy code quality", link="https://www.codacy.com/app/jorgefranconunes/aktoro?utm_source=github.com&utm_medium=referral&utm_content=jorgefranconunes/aktoro&utm_campaign=Badge_Grade"]
+image:https://img.shields.io/maven-central/v/com.varmateo.aktoro/aktoro-api.svg["Maven Central", link="https://repo1.maven.org/maven2/com/varmateo/aktoro/aktoro-api/"]
+image:http://www.javadoc.io/badge/com.varmateo.aktoro/aktoro-api.svg["Javadocs", link="http://www.javadoc.io/doc/com.varmateo.aktoro/aktoro-api"]
 image:https://img.shields.io/badge/License-LGPL%20v3-blue.svg["License: LGPL v3", link="https://www.gnu.org/licenses/lgpl-3.0"]
 
 == Aktoro Project

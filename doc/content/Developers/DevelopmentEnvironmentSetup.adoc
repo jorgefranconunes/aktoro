@@ -86,7 +86,7 @@ integration tests with the build do the following:
 
 [source,sh]
 ----
-./modules/gradlew -P aktoro.integrationTest build
+./modules/gradlew integrationTest build
 ----
 
 In this section, and in the following sections, the examples with the
@@ -124,8 +124,8 @@ line:
 ----
 
 Of course, you can change the `ActorRefImplTest` above with the test
-suite you actually want to run.  By convention classes containing
-integration tests test suites have names ending in `Test`.
+suite you actually want to run.  By convention classes containing unit
+tests suites have names ending in `Test`.
 
 And to run one single unit test:
 
@@ -157,7 +157,7 @@ To force the integration tests to be run again:
 
 Running just one single integration test suite, or one single
 integraton test is the exact same procedure as for unit tests. By
-convention classes containing integration tests test suites have names
+convention classes containing integration tests suites have names
 ending in `IT`.
 
 
