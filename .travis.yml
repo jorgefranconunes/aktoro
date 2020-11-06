@@ -3,11 +3,12 @@
 #
 # https://travis-ci.org/
 #
+---
 
 language: java
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 script:
   - ./devtools/bin/build-travisci-job --run
