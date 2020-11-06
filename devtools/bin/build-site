@@ -304,10 +304,13 @@ function doSetupWorkingArea () {
 
         mkdir ${_workingArea} || aktError "Unable to create ${_workingArea}"
         pushd ${_workingArea} > /dev/null
-        true \
-            && git clone -b ${SITE_BRANCH} ${SITE_REPO} . \
-            && git config user.name ${username} \
-            && git config user.email ${email}
+
+        if [ ! -z "${username}" -a ! -z "${email}" ] ; then
+            git config user.name "${username}" \
+            git config user.email "${email}"
+        fi
+
+        git clone -b ${SITE_BRANCH} ${SITE_REPO} .
 
         exitStatus=$?
         popd  > /dev/null
